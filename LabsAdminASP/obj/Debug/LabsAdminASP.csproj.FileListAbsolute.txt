@@ -1,0 +1,73 @@
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\roslyn\csc.exe
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.CodeAnalysis.dll
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.CSharp.Core.targets
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.VisualBasic.Core.targets
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\roslyn\System.Collections.Immutable.dll
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\roslyn\System.Reflection.Metadata.dll
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\roslyn\vbc.exe
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\roslyn\VBCSCompiler.exe
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\roslyn\VBCSCompiler.exe.config
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\LabsAdminASP.dll.config
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\LabsAdminASP.dll
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\LabsAdminASP.pdb
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\obj\Debug\LabsAdminASP.csprojResolveAssemblyReference.cache
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\obj\Debug\LabsAdminASP.dll
+c:\users\arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\obj\Debug\LabsAdminASP.pdb
+C:\Users\Arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\EntityFramework.dll
+C:\Users\Arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\EntityFramework.SqlServer.dll
+C:\Users\Arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\EntityFramework.xml
+C:\Users\Arturokin12\documents\visual studio 2015\Projects\LabsAdminASP\LabsAdminASP\bin\EntityFramework.SqlServer.xml
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\roslyn\csc.exe
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.CodeAnalysis.dll
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.CSharp.Core.targets
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.VisualBasic.Core.targets
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\roslyn\System.Collections.Immutable.dll
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\roslyn\System.Reflection.Metadata.dll
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\roslyn\vbc.exe
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\roslyn\VBCSCompiler.exe
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\roslyn\VBCSCompiler.exe.config
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\LabsAdminASP.dll.config
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\LabsAdminASP.dll
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\LabsAdminASP.pdb
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\EntityFramework.dll
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\EntityFramework.SqlServer.dll
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\EntityFramework.xml
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\EntityFramework.SqlServer.xml
+\\ARTURO\LabsAdminASP\LabsAdminASP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+\\ARTURO\LabsAdminASP\LabsAdminASP\obj\Debug\LabsAdminASP.dll
+\\ARTURO\LabsAdminASP\LabsAdminASP\obj\Debug\LabsAdminASP.pdb
+\\arturo\LabsAdminASP\LabsAdminASP\obj\Debug\LabsAdminASP.csprojResolveAssemblyReference.cache
+C:\LabsAdminASP\LabsAdminASP\bin\roslyn\csc.exe
+C:\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\LabsAdminASP\LabsAdminASP\bin\roslyn\System.Collections.Immutable.dll
+C:\LabsAdminASP\LabsAdminASP\bin\roslyn\System.Reflection.Metadata.dll
+C:\LabsAdminASP\LabsAdminASP\bin\roslyn\vbc.exe
+C:\LabsAdminASP\LabsAdminASP\bin\roslyn\VBCSCompiler.exe
+C:\LabsAdminASP\LabsAdminASP\bin\roslyn\VBCSCompiler.exe.config
+C:\LabsAdminASP\LabsAdminASP\bin\LabsAdminASP.dll.config
+C:\LabsAdminASP\LabsAdminASP\bin\LabsAdminASP.dll
+C:\LabsAdminASP\LabsAdminASP\bin\LabsAdminASP.pdb
+C:\LabsAdminASP\LabsAdminASP\bin\AjaxControlToolkit.dll
+C:\LabsAdminASP\LabsAdminASP\bin\EntityFramework.dll
+C:\LabsAdminASP\LabsAdminASP\bin\EntityFramework.SqlServer.dll
+C:\LabsAdminASP\LabsAdminASP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\LabsAdminASP\LabsAdminASP\bin\EntityFramework.xml
+C:\LabsAdminASP\LabsAdminASP\bin\EntityFramework.SqlServer.xml
+C:\LabsAdminASP\LabsAdminASP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\LabsAdminASP\LabsAdminASP\obj\Debug\LabsAdminASP.dll
+C:\LabsAdminASP\LabsAdminASP\obj\Debug\LabsAdminASP.pdb
+C:\LabsAdminASP\LabsAdminASP\obj\Debug\LabsAdminASP.csprojResolveAssemblyReference.cache

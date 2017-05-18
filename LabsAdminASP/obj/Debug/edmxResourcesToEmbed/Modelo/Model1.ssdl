@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="LabsAdminModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="actividad">
+    <Key>
+      <PropertyRef Name="id_actividad" />
+    </Key>
+    <Property Name="id_actividad" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="descripcion" Type="varchar(max)" Nullable="false" />
+    <Property Name="id_usuario" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="actividad_computador">
+    <Key>
+      <PropertyRef Name="id_actividad_computador" />
+    </Key>
+    <Property Name="id_actividad_computador" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_actividad" Type="int" Nullable="false" />
+    <Property Name="id_computador" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="computadora">
+    <Key>
+      <PropertyRef Name="id_computadora" />
+    </Key>
+    <Property Name="id_computadora" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Marca" Type="varchar" MaxLength="50" />
+    <Property Name="Modelo" Type="varchar" MaxLength="70" />
+    <Property Name="SO" Type="varchar" MaxLength="100" />
+    <Property Name="id_laboratorio" Type="int" />
+  </EntityType>
+  <EntityType Name="laboratorio">
+    <Key>
+      <PropertyRef Name="id_laboratorio" />
+    </Key>
+    <Property Name="id_laboratorio" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="usuario">
+    <Key>
+      <PropertyRef Name="id_usuario" />
+    </Key>
+    <Property Name="id_usuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="nick" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_actividad_computador_actividad">
+    <End Role="actividad" Type="Self.actividad" Multiplicity="1" />
+    <End Role="actividad_computador" Type="Self.actividad_computador" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="actividad">
+        <PropertyRef Name="id_actividad" />
+      </Principal>
+      <Dependent Role="actividad_computador">
+        <PropertyRef Name="id_actividad" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_actividad_computador_computadora">
+    <End Role="computadora" Type="Self.computadora" Multiplicity="1" />
+    <End Role="actividad_computador" Type="Self.actividad_computador" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="computadora">
+        <PropertyRef Name="id_computadora" />
+      </Principal>
+      <Dependent Role="actividad_computador">
+        <PropertyRef Name="id_computador" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_actividad_usuario">
+    <End Role="usuario" Type="Self.usuario" Multiplicity="1" />
+    <End Role="actividad" Type="Self.actividad" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuario">
+        <PropertyRef Name="id_usuario" />
+      </Principal>
+      <Dependent Role="actividad">
+        <PropertyRef Name="id_usuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_computadora_laboratorio">
+    <End Role="laboratorio" Type="Self.laboratorio" Multiplicity="0..1" />
+    <End Role="computadora" Type="Self.computadora" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="laboratorio">
+        <PropertyRef Name="id_laboratorio" />
+      </Principal>
+      <Dependent Role="computadora">
+        <PropertyRef Name="id_laboratorio" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="LabsAdminModelStoreContainer">
+    <EntitySet Name="actividad" EntityType="Self.actividad" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="actividad_computador" EntityType="Self.actividad_computador" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="computadora" EntityType="Self.computadora" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="laboratorio" EntityType="Self.laboratorio" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="usuario" EntityType="Self.usuario" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_actividad_computador_actividad" Association="Self.FK_actividad_computador_actividad">
+      <End Role="actividad" EntitySet="actividad" />
+      <End Role="actividad_computador" EntitySet="actividad_computador" />
+    </AssociationSet>
+    <AssociationSet Name="FK_actividad_computador_computadora" Association="Self.FK_actividad_computador_computadora">
+      <End Role="computadora" EntitySet="computadora" />
+      <End Role="actividad_computador" EntitySet="actividad_computador" />
+    </AssociationSet>
+    <AssociationSet Name="FK_actividad_usuario" Association="Self.FK_actividad_usuario">
+      <End Role="usuario" EntitySet="usuario" />
+      <End Role="actividad" EntitySet="actividad" />
+    </AssociationSet>
+    <AssociationSet Name="FK_computadora_laboratorio" Association="Self.FK_computadora_laboratorio">
+      <End Role="laboratorio" EntitySet="laboratorio" />
+      <End Role="computadora" EntitySet="computadora" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
