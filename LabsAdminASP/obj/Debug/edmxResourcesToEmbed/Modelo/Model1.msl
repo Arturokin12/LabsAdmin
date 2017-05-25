@@ -23,6 +23,7 @@
     <EntitySetMapping Name="computadora">
       <EntityTypeMapping TypeName="LabsAdminModel.computadora">
         <MappingFragment StoreEntitySet="computadora">
+          <ScalarProperty Name="Mac" ColumnName="Mac" />
           <ScalarProperty Name="id_computadora" ColumnName="id_computadora" />
           <ScalarProperty Name="nombre" ColumnName="nombre" />
           <ScalarProperty Name="Marca" ColumnName="Marca" />

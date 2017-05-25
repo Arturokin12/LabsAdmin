@@ -27,6 +27,7 @@
     <Property Name="Modelo" Type="varchar" MaxLength="70" />
     <Property Name="SO" Type="varchar" MaxLength="100" />
     <Property Name="id_laboratorio" Type="int" />
+    <Property Name="Mac" Type="varchar" MaxLength="20" />
   </EntityType>
   <EntityType Name="laboratorio">
     <Key>

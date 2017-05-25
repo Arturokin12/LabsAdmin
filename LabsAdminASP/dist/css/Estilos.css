@@ -1,0 +1,12 @@
+﻿body {
+}
+
+.tableHeader{
+    background-color:#34495e;
+    color:white;
+}
+
+.tableAlternating{
+    background-color:#bdc3c7;
+    color:black;
+}

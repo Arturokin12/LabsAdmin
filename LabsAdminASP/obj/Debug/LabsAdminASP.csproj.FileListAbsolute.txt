@@ -70,4 +70,3 @@ C:\LabsAdminASP\LabsAdminASP\bin\EntityFramework.SqlServer.xml
 C:\LabsAdminASP\LabsAdminASP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\LabsAdminASP\LabsAdminASP\obj\Debug\LabsAdminASP.dll
 C:\LabsAdminASP\LabsAdminASP\obj\Debug\LabsAdminASP.pdb
-C:\LabsAdminASP\LabsAdminASP\obj\Debug\LabsAdminASP.csprojResolveAssemblyReference.cache

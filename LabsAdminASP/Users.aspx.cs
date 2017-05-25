@@ -25,7 +25,9 @@ namespace LabsAdminASP
 
         protected void tablaUsuarios_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-
+            Label id_usuario = (Label)tablaUsuarios.Rows[e.RowIndex].FindControl("Label1");
+            lbidUsuarioEliminar.Text = id_usuario.Text;
+            modalPopupExtenderEliminar.Show();
         }
 
         protected void tablaUsuarios_SelectedIndexChanging(object sender, GridViewSelectEventArgs e)
@@ -35,7 +37,7 @@ namespace LabsAdminASP
             usuario u = ent.usuario.Find(Convert.ToInt32(id_usuario.Text));
             txtNombreEdit.Text = u.nombre;
             txtNickEdit.Text = u.nick;
-            ModalPopupExtender1.Show();
+            modalPopupExtenderEditar.Show();
         }
 
         protected void AgregarUsuario(object sender, EventArgs e)
@@ -54,18 +56,21 @@ namespace LabsAdminASP
                     tablaUsuarios.DataSource = ent.usuario.ToList();
                     tablaUsuarios.DataBind();
                     ScriptManager.RegisterStartupScript(Page, Page.GetType(), "modalAddUsuario", "$('#modalAddUsuario').modal('hide');", true);
-                    //UpdatePanel1.Update();
+                    UpdatePanel1.Update();
+                    lbTituloMensaje.Text = "Éxito al agregar Usuario";
+                    lbMensaje.Text = "Usuario Agregado satisfactoriamente.";
+                    modalPupoExtenderMensaje.Show();
                 }
                 catch (Exception ex)
                 {
                     lbMensajeAddUsuario.Text = "Error al agregar usuario: " + ex.ToString().Substring(0, 300);
-                    //UpdatePanel2.Update();
+                    UpdatePanel2.Update();
                 }
             }
             else
             {
                 lbMensajeAddUsuario.Text = "Ingrese todos los valores.";
-                //UpdatePanel2.Update();
+                UpdatePanel2.Update();
             }
         }
         protected void editarUsuario(object sender, EventArgs e)
@@ -81,23 +86,50 @@ namespace LabsAdminASP
                     tablaUsuarios.DataSource = ent.usuario.ToList();
                     tablaUsuarios.DataBind();
                     ScriptManager.RegisterStartupScript(Page, Page.GetType(), "modalEditUsuario", "$('#modalEditUsuario').modal('hide');", true);
-                    //UpdatePanel1.Update();
+                    UpdatePanel1.Update();
+                    modalPopupExtenderEditar.Hide();
+                    lbTituloMensaje.Text = "Éxito al editar Usuario";
+                    lbMensaje.Text = "Usuario editado satisfactoriamente.";
+                    modalPupoExtenderMensaje.Show();
                 }
                 catch (Exception ex)
                 {
-                    lbMensajeEditUsuario.Text = "Error al editar usuario: "+ex.ToString().Substring(0,300);
+                    lbTituloMensaje.Text = "Error En editar Usuario";
+                    lbMensaje.Text = "Error al editar usuario: " + ex.ToString().Substring(0, 300);
+                    modalPupoExtenderMensaje.Show();
                 }
-                
             }
             else
             {
-                lbMensajeEditUsuario.Text = "Ingrese todos los valores";
+                lbTituloMensaje.Text = "Error En editar Usuario";
+                lbMensaje.Text = "Ingrese todos los valores";
+                modalPupoExtenderMensaje.Show();
             }
         }
 
-        protected void Button1_Click(object sender, EventArgs e)
+        protected void eliminarUsuario(object sender, EventArgs e)
         {
-            btModalAddUsuario.Text = "AHOrA MENOS SE";
+            if (lbidUsuarioEliminar.Text != "")
+            {
+                try
+                {
+                    usuario u = ent.usuario.Find(Convert.ToInt32(lbidUsuarioEliminar.Text));
+                    ent.usuario.Remove(u);
+                    ent.SaveChanges();
+                    lbTituloMensaje.Text = "Usuario Eliminado";
+                    lbMensaje.Text = "Usuario Eliminado satisfactoriamente";
+                    modalPupoExtenderMensaje.Show();
+                    tablaUsuarios.DataSource = ent.usuario.ToList();
+                    tablaUsuarios.DataBind();
+                }
+                catch (Exception ex)
+                {
+                    lbTituloMensaje.Text = "Error al eliminar usuario";
+                    lbMensaje.Text = "Error: " + ex.ToString().Substring(0,300);
+                    modalPupoExtenderMensaje.Show();
+                }
+            }
         }
+
     }
 }

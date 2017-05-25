@@ -33,6 +33,7 @@
     <Property Name="id_laboratorio" Type="Int32" />
     <NavigationProperty Name="actividad_computador" Relationship="Self.FK_actividad_computador_computadora" FromRole="computadora" ToRole="actividad_computador" />
     <NavigationProperty Name="laboratorio" Relationship="Self.FK_computadora_laboratorio" FromRole="computadora" ToRole="laboratorio" />
+    <Property Name="Mac" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="laboratorio">
     <Key>
