@@ -28,6 +28,7 @@ namespace LabsAdminASP.Modelo
         public Nullable<int> id_laboratorio { get; set; }
         public string Mac { get; set; }
         public string ip { get; set; }
+        public string descripcion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<actividad_computador> actividad_computador { get; set; }

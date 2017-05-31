@@ -14,6 +14,7 @@
         <AssociationConnector Association="LabsAdminModel.FK_actividad_usuario" ManuallyRouted="false" />
         <AssociationConnector Association="LabsAdminModel.FK_actividad_computador_computadora" ManuallyRouted="false" />
         <AssociationConnector Association="LabsAdminModel.FK_computadora_laboratorio" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="LabsAdminModel.config" Width="1.5" PointX="5.375" PointY="4.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

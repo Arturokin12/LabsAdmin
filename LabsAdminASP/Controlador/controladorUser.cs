@@ -18,7 +18,7 @@ namespace LabsAdminASP.Controlador
     public class controladorUser
     {
         LabsAdminEntities1 ent = new LabsAdminEntities1();
-
+        ControladorPass contPass = new ControladorPass();
         public usuario getUsuario(string nick)
         {
             usuario user = new usuario();
@@ -140,10 +140,9 @@ namespace LabsAdminASP.Controlador
                     return "Error desconocido, contacte al administrador.";
                 }
             }
-
         }
 
-        public void WakeUp(string macAddr)
+        public void WakeUp(string macAddr, string ip_addr)
         {
 
             byte[] mac = new byte[6];
@@ -164,7 +163,7 @@ namespace LabsAdminASP.Controlador
                     packet[i * 6 + j] = mac[j];
 
             UdpClient client = new UdpClient();
-            IPAddress ip = IPAddress.Parse("192.168.0.21");
+            IPAddress ip = IPAddress.Parse(ip_addr);
             client.Connect(ip, 0);
             client.Send(packet, packet.Length);
         }
@@ -194,14 +193,14 @@ namespace LabsAdminASP.Controlador
             return ComputerNames;
         }
 
-        public List<ComputadorDom> getIpAllPcs(string ip_red, string usuario, string pass)
+        public List<ComputadorDom> getIpAllPcs(string ip_red, usuario u)
         {
             try
             {
                 string disk = getMainDisk();
                 string directory = disk + @"windows\System32";
                 string cmd = disk + "nmap-7.40\\nmap.exe -sP 1 " + ip_red;
-                string respuesta = ExecuteCommand2(directory, "cmd", usuario, pass, cmd);
+                string respuesta = ExecuteCommand2(directory, "cmd", u.nick, u.pass, cmd);
                 //agregar todos los pcs a una lista
                 //dividir la espuesta por los espacios (saltos de línea)
                 string[] palabrs = respuesta.Split('\n');
@@ -258,7 +257,7 @@ namespace LabsAdminASP.Controlador
             
         }
 
-        public string getIpfromPC(string nombre_pc)
+        public string getIpfromPC(string nombre_pc, usuario u)
         {
             try
             {
@@ -266,7 +265,7 @@ namespace LabsAdminASP.Controlador
                 IPAddress IP = new IPAddress(1);
                 string disk = getMainDisk();
                 string cmd = "ping "+nombre_pc+" -4";
-                string respuesta = ExecuteCommand2(disk,"cmd","Arturokin12", "godofwarjaja123", cmd);
+                string respuesta = ExecuteCommand2(disk,"cmd",u.nick, contPass.Decrypt(u.pass), cmd);
                 string[] lineas = respuesta.Split('\n');
                 for (int i = 0; i < lineas.Length; i++)
                 {
@@ -291,12 +290,12 @@ namespace LabsAdminASP.Controlador
             }
         }
 
-        public string GetMacAddress(string ip, string usuario, string pass)
+        public string GetMacAddress(string ip, usuario u)
         {
             string cmd = "arp -a "+ip;
             string disk = getMainDisk();
             string directory = disk + @"Windows\System32";
-            string respuesta = ExecuteCommand(directory, "cmd",usuario, pass, cmd);
+            string respuesta = ExecuteCommand(directory, "cmd",u.nick, contPass.Decrypt(u.pass), cmd);
 
             return respuesta;
         }
@@ -314,6 +313,16 @@ namespace LabsAdminASP.Controlador
             }
         }
 
-
+        public usuario getUsuario(int id)
+        {
+            try
+            {
+                return ent.usuario.Find(id);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
 }

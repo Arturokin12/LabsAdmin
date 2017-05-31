@@ -34,6 +34,8 @@
     <NavigationProperty Name="actividad_computador" Relationship="Self.FK_actividad_computador_computadora" FromRole="computadora" ToRole="actividad_computador" />
     <NavigationProperty Name="laboratorio" Relationship="Self.FK_computadora_laboratorio" FromRole="computadora" ToRole="laboratorio" />
     <Property Name="Mac" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="ip" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="laboratorio">
     <Key>
@@ -51,6 +53,8 @@
     <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="nick" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
     <NavigationProperty Name="actividad" Relationship="Self.FK_actividad_usuario" FromRole="usuario" ToRole="actividad" />
+    <Property Name="pass" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="imagen" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
   </EntityType>
   <Association Name="FK_actividad_computador_actividad">
     <End Role="actividad" Type="Self.actividad" Multiplicity="1" />
@@ -122,5 +126,19 @@
       <End Role="laboratorio" EntitySet="laboratorio" />
       <End Role="computadora" EntitySet="computadora" />
     </AssociationSet>
+    <EntitySet Name="config" EntityType="LabsAdminModel.config" />
   </EntityContainer>
+  <EntityType Name="config">
+    <Key>
+      <PropertyRef Name="id_conf" />
+    </Key>
+    <Property Name="id_conf" Type="Int32" Nullable="false" />
+    <Property Name="nombre_dominio" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ip_dominio" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="usar_dominio" Type="Int32" />
+    <Property Name="usuario_admin" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="pass_admin" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="usar_usuario" Type="Int32" />
+    <Property Name="dominio" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+  </EntityType>
 </Schema>

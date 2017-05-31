@@ -34,6 +34,20 @@
           <Property Name="id_laboratorio" Type="int" />
           <Property Name="Mac" Type="varchar" MaxLength="20" />
           <Property Name="ip" Type="varchar" MaxLength="20" />
+          <Property Name="descripcion" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="config">
+          <Key>
+            <PropertyRef Name="id_conf" />
+          </Key>
+          <Property Name="id_conf" Type="int" Nullable="false" />
+          <Property Name="dominio" Type="varchar" MaxLength="200" />
+          <Property Name="nombre_dominio" Type="varchar" MaxLength="200" />
+          <Property Name="ip_dominio" Type="varchar" MaxLength="20" />
+          <Property Name="usar_dominio" Type="int" />
+          <Property Name="usuario_admin" Type="varchar" MaxLength="100" />
+          <Property Name="pass_admin" Type="varchar" MaxLength="100" />
+          <Property Name="usar_usuario" Type="int" />
         </EntityType>
         <EntityType Name="laboratorio">
           <Key>
@@ -49,6 +63,8 @@
           <Property Name="id_usuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="nick" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="pass" Type="varchar(max)" />
+          <Property Name="imagen" Type="varchar" MaxLength="1000" />
         </EntityType>
         <Association Name="FK_actividad_computador_actividad">
           <End Role="actividad" Type="Self.actividad" Multiplicity="1" />
@@ -102,6 +118,7 @@
           <EntitySet Name="actividad" EntityType="Self.actividad" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="actividad_computador" EntityType="Self.actividad_computador" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="computadora" EntityType="Self.computadora" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="config" EntityType="Self.config" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="laboratorio" EntityType="Self.laboratorio" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="usuario" EntityType="Self.usuario" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_actividad_computador_actividad" Association="Self.FK_actividad_computador_actividad">
@@ -160,6 +177,7 @@
           <NavigationProperty Name="laboratorio" Relationship="Self.FK_computadora_laboratorio" FromRole="computadora" ToRole="laboratorio" />
           <Property Name="Mac" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="ip" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="laboratorio">
           <Key>
@@ -177,6 +195,8 @@
           <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="nick" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="actividad" Relationship="Self.FK_actividad_usuario" FromRole="usuario" ToRole="actividad" />
+          <Property Name="pass" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="imagen" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
         </EntityType>
         <Association Name="FK_actividad_computador_actividad">
           <End Role="actividad" Type="Self.actividad" Multiplicity="1" />
@@ -248,7 +268,21 @@
             <End Role="laboratorio" EntitySet="laboratorio" />
             <End Role="computadora" EntitySet="computadora" />
           </AssociationSet>
+          <EntitySet Name="config" EntityType="LabsAdminModel.config" />
         </EntityContainer>
+        <EntityType Name="config">
+          <Key>
+            <PropertyRef Name="id_conf" />
+          </Key>
+          <Property Name="id_conf" Type="Int32" Nullable="false" />
+          <Property Name="nombre_dominio" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ip_dominio" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="usar_dominio" Type="Int32" />
+          <Property Name="usuario_admin" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="pass_admin" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="usar_usuario" Type="Int32" />
+          <Property Name="dominio" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -277,6 +311,7 @@
           <EntitySetMapping Name="computadora">
             <EntityTypeMapping TypeName="LabsAdminModel.computadora">
               <MappingFragment StoreEntitySet="computadora">
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
                 <ScalarProperty Name="ip" ColumnName="ip" />
                 <ScalarProperty Name="Mac" ColumnName="Mac" />
                 <ScalarProperty Name="id_computadora" ColumnName="id_computadora" />
@@ -299,9 +334,25 @@
           <EntitySetMapping Name="usuario">
             <EntityTypeMapping TypeName="LabsAdminModel.usuario">
               <MappingFragment StoreEntitySet="usuario">
+                <ScalarProperty Name="imagen" ColumnName="imagen" />
+                <ScalarProperty Name="pass" ColumnName="pass" />
                 <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
                 <ScalarProperty Name="nick" ColumnName="nick" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="config">
+            <EntityTypeMapping TypeName="LabsAdminModel.config">
+              <MappingFragment StoreEntitySet="config">
+                <ScalarProperty Name="dominio" ColumnName="dominio" />
+                <ScalarProperty Name="usar_usuario" ColumnName="usar_usuario" />
+                <ScalarProperty Name="pass_admin" ColumnName="pass_admin" />
+                <ScalarProperty Name="usuario_admin" ColumnName="usuario_admin" />
+                <ScalarProperty Name="usar_dominio" ColumnName="usar_dominio" />
+                <ScalarProperty Name="ip_dominio" ColumnName="ip_dominio" />
+                <ScalarProperty Name="nombre_dominio" ColumnName="nombre_dominio" />
+                <ScalarProperty Name="id_conf" ColumnName="id_conf" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

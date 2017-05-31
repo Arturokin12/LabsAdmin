@@ -28,6 +28,21 @@
     <Property Name="SO" Type="varchar" MaxLength="100" />
     <Property Name="id_laboratorio" Type="int" />
     <Property Name="Mac" Type="varchar" MaxLength="20" />
+    <Property Name="ip" Type="varchar" MaxLength="20" />
+    <Property Name="descripcion" Type="varchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="config">
+    <Key>
+      <PropertyRef Name="id_conf" />
+    </Key>
+    <Property Name="id_conf" Type="int" Nullable="false" />
+    <Property Name="dominio" Type="varchar" MaxLength="200" />
+    <Property Name="nombre_dominio" Type="varchar" MaxLength="200" />
+    <Property Name="ip_dominio" Type="varchar" MaxLength="20" />
+    <Property Name="usar_dominio" Type="int" />
+    <Property Name="usuario_admin" Type="varchar" MaxLength="100" />
+    <Property Name="pass_admin" Type="varchar" MaxLength="100" />
+    <Property Name="usar_usuario" Type="int" />
   </EntityType>
   <EntityType Name="laboratorio">
     <Key>
@@ -43,6 +58,8 @@
     <Property Name="id_usuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="nick" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="pass" Type="varchar(max)" />
+    <Property Name="imagen" Type="varchar" MaxLength="1000" />
   </EntityType>
   <Association Name="FK_actividad_computador_actividad">
     <End Role="actividad" Type="Self.actividad" Multiplicity="1" />
@@ -96,6 +113,7 @@
     <EntitySet Name="actividad" EntityType="Self.actividad" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="actividad_computador" EntityType="Self.actividad_computador" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="computadora" EntityType="Self.computadora" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="config" EntityType="Self.config" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="laboratorio" EntityType="Self.laboratorio" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="usuario" EntityType="Self.usuario" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_actividad_computador_actividad" Association="Self.FK_actividad_computador_actividad">

@@ -16,6 +16,11 @@ namespace LabsAdmin_Plantilla
         {
             if (!IsPostBack)
             {
+                usuario u = ent.usuario.Find(2);
+                //lbid_usuario.Text = u.id_usuario + "";
+                //.Text = u.nick;
+                lbNombreUsuario.Text = u.nombre; lbNombreUsuario2.Text = u.nombre;
+                imgUsuario1.ImageUrl = u.imagen; imgUsuario2.ImageUrl = u.imagen;
             }
         }
 
@@ -73,6 +78,16 @@ namespace LabsAdmin_Plantilla
         protected void btPcsDominio_Click(object sender, EventArgs e)
         {
             Response.Redirect("Dominio.aspx");
+        }
+
+        protected void btConfig_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("configuracion.aspx");
+        }
+
+        protected void btPerfil_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("perfil.aspx");
         }
     }
 }

@@ -5,6 +5,7 @@
     <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Always">
         <ContentTemplate>
             <div class="row">
+                <asp:Label ID="lbid_usuario" runat="server" Text=""></asp:Label>
                 <div class="col-md-12">
                     <div class="x_panel">
                         <div class="x_title">

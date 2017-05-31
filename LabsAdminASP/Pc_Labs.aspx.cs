@@ -15,6 +15,7 @@ namespace LabsAdminASP
     {
         LabsAdminEntities1 ent = new LabsAdminEntities1();
         controladorUser cont = new controladorUser();
+        ControladorPass contPass = new ControladorPass();
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -23,7 +24,7 @@ namespace LabsAdminASP
                 string x = Session["id_laboratorio"].ToString();
                 string id_lab = x.Replace("btLab", "");
                 laboratorio laboratorio = ent.laboratorio.Find(Convert.ToInt32(id_lab));
-
+                lbid_usuario.Text = "4";
 
             }
         }
@@ -115,10 +116,13 @@ namespace LabsAdminASP
             }
         }
         public void Apagar(object sender, EventArgs e)
-        {            LinkButton btApagarPc = (LinkButton)sender;
+        {
+            LinkButton btApagarPc = (LinkButton)sender;
             int id = Convert.ToInt32(btApagarPc.ID.Replace("bt_apagar", ""));
             computadora pc = ent.computadora.Find(id);
-            string command = @"\\" + pc.nombre + " -u administrador -p Labsadmin123 shutdown -p";
+            int id_user = Convert.ToInt32(lbid_usuario.Text);
+            usuario u = cont.getUsuario(id_user);
+            string command = @"\\" + pc.nombre + " -u "+u.nick+" -p "+contPass.Decrypt(u.pass)+" shutdown -p";
             string disk = cont.getMainDisk();
             string directory = disk + @"Windows\System32";
             string respuesta = cont.ExecuteCommand(directory,"psexec", "Arturokin12", "godofwarjaja123", command);
@@ -132,7 +136,9 @@ namespace LabsAdminASP
             //cont.WakeUp();
             //lbMensaje.Text = hola;
             //modalPupoExtenderMensaje.Show();
-            List<ComputadorDom> listaPcs = cont.getIpAllPcs("192.168.0.*","Arturokin12","godofwarjaja123");
+            int id_user = Convert.ToInt32(lbid_usuario.Text);
+            usuario u = cont.getUsuario(id_user);
+            List<ComputadorDom> listaPcs = cont.getIpAllPcs("192.168.0.*",u);
             
 
         }

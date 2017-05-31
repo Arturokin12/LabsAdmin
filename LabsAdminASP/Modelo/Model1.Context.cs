@@ -30,5 +30,6 @@ namespace LabsAdminASP.Modelo
         public virtual DbSet<computadora> computadora { get; set; }
         public virtual DbSet<laboratorio> laboratorio { get; set; }
         public virtual DbSet<usuario> usuario { get; set; }
+        public virtual DbSet<config> config { get; set; }
     }
 }
