@@ -140,5 +140,6 @@
     <Property Name="pass_admin" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="usar_usuario" Type="Int32" />
     <Property Name="dominio" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ip_red" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
   </EntityType>
 </Schema>

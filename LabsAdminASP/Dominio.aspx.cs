@@ -24,6 +24,8 @@ namespace LabsAdminASP
                 List<string> pcs = new List<string>();
                 pcs.Add("DESKTOP-IFOB8Q2");
                 pcs.Add("tal_lab0101");
+                pcs.Add("DESKTOP-SGF53VS");
+
                 List<ComputadorDom> listaPcs = new List<ComputadorDom>();
                 foreach (var i in pcs)
                 {
@@ -67,7 +69,7 @@ namespace LabsAdminASP
         {
             UpdatePanel2.Update();
             int id_user = Convert.ToInt32(lbid_usuario.Text);
-            usuario u = cont.getUsuario(id_user);
+            usuario u = cont.getUsuario(2);
             string ip_pc = cont.getIpfromPC(lbNombreComputadora.Text, u);   
             if (ip_pc != "" && ip_pc != null)
             {

@@ -43,6 +43,7 @@
     <Property Name="usuario_admin" Type="varchar" MaxLength="100" />
     <Property Name="pass_admin" Type="varchar" MaxLength="100" />
     <Property Name="usar_usuario" Type="int" />
+    <Property Name="ip_red" Type="varchar" MaxLength="20" />
   </EntityType>
   <EntityType Name="laboratorio">
     <Key>

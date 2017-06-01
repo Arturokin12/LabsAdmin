@@ -22,5 +22,6 @@ namespace LabsAdminASP.Modelo
         public string pass_admin { get; set; }
         public Nullable<int> usar_usuario { get; set; }
         public string dominio { get; set; }
+        public string ip_red { get; set; }
     }
 }

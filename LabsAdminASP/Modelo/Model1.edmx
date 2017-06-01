@@ -48,6 +48,7 @@
           <Property Name="usuario_admin" Type="varchar" MaxLength="100" />
           <Property Name="pass_admin" Type="varchar" MaxLength="100" />
           <Property Name="usar_usuario" Type="int" />
+          <Property Name="ip_red" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="laboratorio">
           <Key>
@@ -282,6 +283,7 @@
           <Property Name="pass_admin" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="usar_usuario" Type="Int32" />
           <Property Name="dominio" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ip_red" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -345,6 +347,7 @@
           <EntitySetMapping Name="config">
             <EntityTypeMapping TypeName="LabsAdminModel.config">
               <MappingFragment StoreEntitySet="config">
+                <ScalarProperty Name="ip_red" ColumnName="ip_red" />
                 <ScalarProperty Name="dominio" ColumnName="dominio" />
                 <ScalarProperty Name="usar_usuario" ColumnName="usar_usuario" />
                 <ScalarProperty Name="pass_admin" ColumnName="pass_admin" />

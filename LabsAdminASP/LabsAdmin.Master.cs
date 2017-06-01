@@ -16,10 +16,17 @@ namespace LabsAdmin_Plantilla
         {
             if (!IsPostBack)
             {
-                usuario u = ent.usuario.Find(2);
+                usuario u = ent.usuario.Find(3);
                 //lbid_usuario.Text = u.id_usuario + "";
                 //.Text = u.nick;
-                lbNombreUsuario.Text = u.nombre; lbNombreUsuario2.Text = u.nombre;
+                if (u.nombre.Split().Length > 1)
+                {
+                    lbNombreUsuario.Text = u.nombre.Split()[0] + " " + u.nombre.Split()[1]; lbNombreUsuario2.Text = u.nombre.Split()[0] + " " + u.nombre.Split()[1];
+                }else
+                {
+                    lbNombreUsuario.Text = u.nombre; lbNombreUsuario2.Text = u.nombre.Split()[0] + " " + u.nombre.Split()[1];
+                }
+                
                 imgUsuario1.ImageUrl = u.imagen; imgUsuario2.ImageUrl = u.imagen;
             }
         }

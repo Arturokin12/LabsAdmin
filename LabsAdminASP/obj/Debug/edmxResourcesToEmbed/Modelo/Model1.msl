@@ -57,6 +57,7 @@
     <EntitySetMapping Name="config">
       <EntityTypeMapping TypeName="LabsAdminModel.config">
         <MappingFragment StoreEntitySet="config">
+          <ScalarProperty Name="ip_red" ColumnName="ip_red" />
           <ScalarProperty Name="dominio" ColumnName="dominio" />
           <ScalarProperty Name="usar_usuario" ColumnName="usar_usuario" />
           <ScalarProperty Name="pass_admin" ColumnName="pass_admin" />

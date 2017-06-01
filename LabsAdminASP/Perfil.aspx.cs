@@ -19,7 +19,7 @@ namespace LabsAdminASP
         {
             if (!IsPostBack)
             {
-                usuario u = ent.usuario.Find(4);
+                usuario u = ent.usuario.Find(3);
                 lbid_usuario.Text = u.id_usuario + "";
                 txtNick.Text = u.nick;
                 txtNombre.Text = u.nombre;

@@ -200,7 +200,7 @@ namespace LabsAdminASP.Controlador
                 string disk = getMainDisk();
                 string directory = disk + @"windows\System32";
                 string cmd = disk + "nmap-7.40\\nmap.exe -sP 1 " + ip_red;
-                string respuesta = ExecuteCommand2(directory, "cmd", u.nick, u.pass, cmd);
+                string respuesta = ExecuteCommand2(directory, "cmd", u.nick, contPass.Decrypt(u.pass), cmd);
                 //agregar todos los pcs a una lista
                 //dividir la espuesta por los espacios (saltos de línea)
                 string[] palabrs = respuesta.Split('\n');
@@ -264,7 +264,9 @@ namespace LabsAdminASP.Controlador
                 string ip = "";
                 IPAddress IP = new IPAddress(1);
                 string disk = getMainDisk();
-                string cmd = "ping "+nombre_pc+" -4";
+                int id_pc = Convert.ToInt32(nombre_pc);
+                computadora c = ent.computadora.Find(id_pc);
+                string cmd = "ping "+c.nombre+" -4";
                 string respuesta = ExecuteCommand2(disk,"cmd",u.nick, contPass.Decrypt(u.pass), cmd);
                 string[] lineas = respuesta.Split('\n');
                 for (int i = 0; i < lineas.Length; i++)
