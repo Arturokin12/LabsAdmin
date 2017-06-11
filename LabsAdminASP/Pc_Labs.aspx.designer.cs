@@ -112,6 +112,15 @@ namespace LabsAdminASP {
         protected global::System.Web.UI.WebControls.LinkButton lnkCopiarSelect;
         
         /// <summary>
+        /// Control lnkLimpiarCuentas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkLimpiarCuentas;
+        
+        /// <summary>
         /// Control btHiddenMensaje.
         /// </summary>
         /// <remarks>
@@ -220,22 +229,22 @@ namespace LabsAdminASP {
         protected global::System.Web.UI.WebControls.Label lbid_pcAccion;
         
         /// <summary>
-        /// Control panelEncenderconIP.
+        /// Control panelconIP.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel panelEncenderconIP;
+        protected global::System.Web.UI.WebControls.Panel panelconIP;
         
         /// <summary>
-        /// Control chkEncenderIP.
+        /// Control chkIP.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.CheckBox chkEncenderIP;
+        protected global::System.Web.UI.WebControls.CheckBox chkIP;
         
         /// <summary>
         /// Control updateProgressConfirmar.
@@ -256,15 +265,6 @@ namespace LabsAdminASP {
         protected global::System.Web.UI.WebControls.Button btConfirmarApagar;
         
         /// <summary>
-        /// Control btConfirmarEncender.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btConfirmarEncender;
-        
-        /// <summary>
         /// Control btConfirmarApagarTodos.
         /// </summary>
         /// <remarks>
@@ -274,6 +274,51 @@ namespace LabsAdminASP {
         protected global::System.Web.UI.WebControls.Button btConfirmarApagarTodos;
         
         /// <summary>
+        /// Control btConfirmarApagarSelected.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btConfirmarApagarSelected;
+        
+        /// <summary>
+        /// Control btConfirmarLimpiarCuentas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btConfirmarLimpiarCuentas;
+        
+        /// <summary>
+        /// Control btConfirmarLimpiarCuentasTodos.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btConfirmarLimpiarCuentasTodos;
+        
+        /// <summary>
+        /// Control btConfirmarLimpiarCuentasSelected.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btConfirmarLimpiarCuentasSelected;
+        
+        /// <summary>
+        /// Control btConfirmarEncender.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btConfirmarEncender;
+        
+        /// <summary>
         /// Control btConfirmarEncenderTodos.
         /// </summary>
         /// <remarks>
@@ -281,6 +326,15 @@ namespace LabsAdminASP {
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btConfirmarEncenderTodos;
+        
+        /// <summary>
+        /// Control btConfirmarEncenderSelected.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btConfirmarEncenderSelected;
         
         /// <summary>
         /// Control btNoConfirmar.
@@ -463,6 +517,24 @@ namespace LabsAdminASP {
         protected global::System.Web.UI.WebControls.Button btCopiarArchivo;
         
         /// <summary>
+        /// Control btCopiarArchivotodos.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btCopiarArchivotodos;
+        
+        /// <summary>
+        /// Control btCopiarArchivosSelected.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btCopiarArchivosSelected;
+        
+        /// <summary>
         /// Control lbMovidos.
         /// </summary>
         /// <remarks>
@@ -481,31 +553,13 @@ namespace LabsAdminASP {
         protected global::System.Web.UI.WebControls.View ViewCarpetas;
         
         /// <summary>
-        /// Control ListaArchivos.
+        /// Control txtRuta.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox ListaArchivos;
-        
-        /// <summary>
-        /// Control CargarCarpeta.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.FileUpload CargarCarpeta;
-        
-        /// <summary>
-        /// Control RadioButton1.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton RadioButton1;
+        protected global::System.Web.UI.WebControls.TextBox txtRuta;
         
         /// <summary>
         /// Control Label4.
@@ -517,13 +571,13 @@ namespace LabsAdminASP {
         protected global::System.Web.UI.WebControls.Label Label4;
         
         /// <summary>
-        /// Control RadioButton2.
+        /// Control RbEscritorioPublico2.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton RadioButton2;
+        protected global::System.Web.UI.WebControls.RadioButton RbEscritorioPublico2;
         
         /// <summary>
         /// Control Label5.
@@ -535,13 +589,13 @@ namespace LabsAdminASP {
         protected global::System.Web.UI.WebControls.Label Label5;
         
         /// <summary>
-        /// Control RadioButton3.
+        /// Control RbDiscoLocal2.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton RadioButton3;
+        protected global::System.Web.UI.WebControls.RadioButton RbDiscoLocal2;
         
         /// <summary>
         /// Control Label6.
@@ -553,13 +607,67 @@ namespace LabsAdminASP {
         protected global::System.Web.UI.WebControls.Label Label6;
         
         /// <summary>
-        /// Control TextBox1.
+        /// Control RbPersonalizado2.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox TextBox1;
+        protected global::System.Web.UI.WebControls.RadioButton RbPersonalizado2;
+        
+        /// <summary>
+        /// Control Label8.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label8;
+        
+        /// <summary>
+        /// Control txtPersonalizada2.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtPersonalizada2;
+        
+        /// <summary>
+        /// Control ListCargaCarpetas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ListBox ListCargaCarpetas;
+        
+        /// <summary>
+        /// Control btnCOpiarCarpeta.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCOpiarCarpeta;
+        
+        /// <summary>
+        /// Control BtnCopiarCArpetasTodos.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button BtnCopiarCArpetasTodos;
+        
+        /// <summary>
+        /// Control lbCarpMovidas.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lbCarpMovidas;
         
         /// <summary>
         /// Control modalPopupExtenderCopiar.

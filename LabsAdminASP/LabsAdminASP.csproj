@@ -129,6 +129,9 @@
     <Content Include="login.aspx" />
     <Content Include="Pc_Labs.aspx" />
     <Content Include="Perfil.aspx" />
+    <Content Include="Thirds\DelProf2.exe" />
+    <Content Include="Thirds\PsExec.exe" />
+    <Content Include="Thirds\PsExec64.exe" />
     <Content Include="Users.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

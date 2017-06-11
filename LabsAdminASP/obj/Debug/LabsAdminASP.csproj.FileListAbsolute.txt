@@ -61,7 +61,6 @@ C:\LabsAdminASP\LabsAdminASP\bin\roslyn\VBCSCompiler.exe.config
 C:\LabsAdminASP\LabsAdminASP\bin\LabsAdminASP.dll.config
 C:\LabsAdminASP\LabsAdminASP\bin\LabsAdminASP.dll
 C:\LabsAdminASP\LabsAdminASP\bin\LabsAdminASP.pdb
-C:\LabsAdminASP\LabsAdminASP\bin\AjaxControlToolkit.dll
 C:\LabsAdminASP\LabsAdminASP\bin\EntityFramework.dll
 C:\LabsAdminASP\LabsAdminASP\bin\EntityFramework.SqlServer.dll
 C:\LabsAdminASP\LabsAdminASP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
@@ -70,3 +69,53 @@ C:\LabsAdminASP\LabsAdminASP\bin\EntityFramework.SqlServer.xml
 C:\LabsAdminASP\LabsAdminASP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\LabsAdminASP\LabsAdminASP\obj\Debug\LabsAdminASP.dll
 C:\LabsAdminASP\LabsAdminASP\obj\Debug\LabsAdminASP.pdb
+C:\LabsAdminASP\LabsAdminASP\obj\Debug\LabsAdminASP.csprojResolveAssemblyReference.cache
+D:\LabsAdminASP\LabsAdminASP\bin\roslyn\csc.exe
+D:\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\LabsAdminASP\LabsAdminASP\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\LabsAdminASP\LabsAdminASP\bin\roslyn\System.Collections.Immutable.dll
+D:\LabsAdminASP\LabsAdminASP\bin\roslyn\System.Reflection.Metadata.dll
+D:\LabsAdminASP\LabsAdminASP\bin\roslyn\vbc.exe
+D:\LabsAdminASP\LabsAdminASP\bin\roslyn\VBCSCompiler.exe
+D:\LabsAdminASP\LabsAdminASP\bin\roslyn\VBCSCompiler.exe.config
+D:\LabsAdminASP\LabsAdminASP\bin\LabsAdminASP.dll.config
+D:\LabsAdminASP\LabsAdminASP\bin\LabsAdminASP.dll
+D:\LabsAdminASP\LabsAdminASP\bin\LabsAdminASP.pdb
+D:\LabsAdminASP\LabsAdminASP\bin\AjaxControlToolkit.dll
+D:\LabsAdminASP\LabsAdminASP\bin\EntityFramework.dll
+D:\LabsAdminASP\LabsAdminASP\bin\EntityFramework.SqlServer.dll
+D:\LabsAdminASP\LabsAdminASP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\LabsAdminASP\LabsAdminASP\bin\EntityFramework.xml
+D:\LabsAdminASP\LabsAdminASP\bin\EntityFramework.SqlServer.xml
+D:\LabsAdminASP\LabsAdminASP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\LabsAdminASP\LabsAdminASP\obj\Debug\LabsAdminASP.csprojResolveAssemblyReference.cache
+D:\LabsAdminASP\LabsAdminASP\obj\Debug\LabsAdminASP.dll
+D:\LabsAdminASP\LabsAdminASP\obj\Debug\LabsAdminASP.pdb
+C:\LabsAdminASP - copia\LabsAdminASP\bin\roslyn\csc.exe
+C:\LabsAdminASP - copia\LabsAdminASP\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\LabsAdminASP - copia\LabsAdminASP\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\LabsAdminASP - copia\LabsAdminASP\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\LabsAdminASP - copia\LabsAdminASP\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\LabsAdminASP - copia\LabsAdminASP\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\LabsAdminASP - copia\LabsAdminASP\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\LabsAdminASP - copia\LabsAdminASP\bin\roslyn\System.Collections.Immutable.dll
+C:\LabsAdminASP - copia\LabsAdminASP\bin\roslyn\System.Reflection.Metadata.dll
+C:\LabsAdminASP - copia\LabsAdminASP\bin\roslyn\vbc.exe
+C:\LabsAdminASP - copia\LabsAdminASP\bin\roslyn\VBCSCompiler.exe
+C:\LabsAdminASP - copia\LabsAdminASP\bin\roslyn\VBCSCompiler.exe.config
+C:\LabsAdminASP - copia\LabsAdminASP\bin\LabsAdminASP.dll.config
+C:\LabsAdminASP - copia\LabsAdminASP\bin\LabsAdminASP.dll
+C:\LabsAdminASP - copia\LabsAdminASP\bin\LabsAdminASP.pdb
+C:\LabsAdminASP - copia\LabsAdminASP\bin\EntityFramework.dll
+C:\LabsAdminASP - copia\LabsAdminASP\bin\EntityFramework.SqlServer.dll
+C:\LabsAdminASP - copia\LabsAdminASP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\LabsAdminASP - copia\LabsAdminASP\bin\EntityFramework.xml
+C:\LabsAdminASP - copia\LabsAdminASP\bin\EntityFramework.SqlServer.xml
+C:\LabsAdminASP - copia\LabsAdminASP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\LabsAdminASP - copia\LabsAdminASP\obj\Debug\LabsAdminASP.csprojResolveAssemblyReference.cache
+C:\LabsAdminASP - copia\LabsAdminASP\obj\Debug\LabsAdminASP.dll
+C:\LabsAdminASP - copia\LabsAdminASP\obj\Debug\LabsAdminASP.pdb

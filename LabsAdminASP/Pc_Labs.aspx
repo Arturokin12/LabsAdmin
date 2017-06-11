@@ -19,8 +19,8 @@
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
                                     <ul class="dropdown-menu" role="menu">
-                                        <asp:LinkButton ID="lnkEncender" CssClass="fa fa-sun-o" runat="server">Encender Laboratorio</asp:LinkButton>
-                                        <asp:LinkButton ID="lnkApagar" OnClick="lnkApagar_Click" CssClass="fa fa-power-off" runat="server">Apagar Laboratorio</asp:LinkButton>
+                                        <asp:LinkButton ID="lnkEncender" OnClick="panelEncenderTodos" CssClass="fa fa-sun-o" runat="server">Encender Laboratorio</asp:LinkButton>
+                                        <asp:LinkButton ID="lnkApagar" OnClick="panelApagarTodos" CssClass="fa fa-power-off" runat="server">Apagar Laboratorio</asp:LinkButton>
                                         <asp:LinkButton ID="lnkCopiar" CssClass="fa fa-scissors" runat="server">Copiar a Laboratorio</asp:LinkButton>
                                     </ul>
                                 </li>
@@ -34,9 +34,10 @@
                                     </div>
                                 </div>
                                 <div class="col-md-2">
-                                    <asp:LinkButton ID="lnkEncenderSelect" Width="100%" CssClass="btn btn-info btn-new disabled" Enabled="false" runat="server"><i class="fa fa-sun-o"></i> Endender Seleccionados</asp:LinkButton>
-                                    <asp:LinkButton ID="lnkApagarSelect" Width="100%" CssClass="btn btn-info btn-new disabled" Enabled="false" runat="server"><i class="fa fa-power-off"></i> Apagar Seleccionados</asp:LinkButton>
+                                    <asp:LinkButton ID="lnkEncenderSelect" OnClick="panelEncenderSelected" Width="100%" CssClass="btn btn-info btn-new disabled" Enabled="false" runat="server"><i class="fa fa-sun-o"></i> Endender Seleccionados</asp:LinkButton>
+                                    <asp:LinkButton ID="lnkApagarSelect" OnClick="panelApagarSelected" Width="100%" CssClass="btn btn-info btn-new disabled" Enabled="false" runat="server"><i class="fa fa-power-off"></i> Apagar Seleccionados</asp:LinkButton>
                                     <asp:LinkButton ID="lnkCopiarSelect" Width="100%" CssClass="btn btn-info btn-new disabled" Enabled="false" runat="server"><i class="fa fa-scissors"></i> Copiar a Seleccionados</asp:LinkButton>
+                                    <asp:LinkButton ID="lnkLimpiarCuentas" OnClick="panelLimpiarCuentasSelected" Width="100%" CssClass="btn btn-info btn-new disabled" Enabled="false" runat="server"><i class="fa fa-eraser"></i> Limpiar Cuentas</asp:LinkButton>
                                 </div>
                             </div>
 
@@ -90,8 +91,8 @@
                                         <asp:Label ID="lbMensajeConfirmar" runat="server" Text="Label"></asp:Label></h3>
                                     <asp:Label ID="lbid_pcAccion" runat="server" Text="" CssClass="hidden"></asp:Label>
                                     <div style="text-align: center">
-                                        <asp:Panel ID="panelEncenderconIP" runat="server">
-                                            <asp:CheckBox ID="chkEncenderIP" Text="Obtener ip" runat="server" />
+                                        <asp:Panel ID="panelconIP" runat="server">
+                                            <asp:CheckBox ID="chkIP" Text="Obtener ip" runat="server" />
                                         </asp:Panel>
                                         <asp:UpdateProgress ID="updateProgressConfirmar" AssociatedUpdatePanelID="UpdatePanel3" runat="server">
                                             <ProgressTemplate>
@@ -99,9 +100,17 @@
                                             </ProgressTemplate>
                                         </asp:UpdateProgress>
                                         <asp:Button ID="btConfirmarApagar" OnClick="apagar" CssClass="btn btn-default" runat="server" Text="Si" />
-                                        <asp:Button ID="btConfirmarEncender" CssClass="btn btn-default" OnClick="btConfirmarEncender_Click" runat="server" Text="Si" />
                                         <asp:Button ID="btConfirmarApagarTodos" OnClick="btConfirmarApagarTodos_Click" CssClass="btn btn-default" runat="server" Text="Si" />
-                                        <asp:Button ID="btConfirmarEncenderTodos" OnClick="btConfirmarEncenderTodos_Click" CssClass="btn btn-default" runat="server" Text="Si" />
+                                        <asp:Button ID="btConfirmarApagarSelected" OnClick="panelApagarSelected" CssClass="btn btn-default" runat="server" Text="Si" />
+                                        
+                                        <asp:Button ID="btConfirmarLimpiarCuentas" OnClick="confirmarLimpiarCuentasTodos" CssClass="btn btn-default" runat="server" Text="Si" />
+                                        <asp:Button ID="btConfirmarLimpiarCuentasTodos" OnClick="confirmarLimpiarCuentasTodos" CssClass="btn btn-default" runat="server" Text="Si" />
+                                        <asp:Button ID="btConfirmarLimpiarCuentasSelected" OnClick="LimpiarCuentasSelected" CssClass="btn btn-default" runat="server" Text="Si" />
+                                        
+                                        <asp:Button ID="btConfirmarEncender" OnClick="encender" CssClass="btn btn-default" runat="server" Text="Si" />
+                                        <asp:Button ID="btConfirmarEncenderTodos" OnClick="ConfirmarEncenderTodos" CssClass="btn btn-default" runat="server" Text="Si" />
+                                        <asp:Button ID="btConfirmarEncenderSelected" OnClick="encenderSelected" CssClass="btn btn-default" runat="server" Text="Si" />
+                                        
                                         <asp:Button ID="btNoConfirmar" CssClass="btn btn-default" OnClick="hideModalConfirm" runat="server" Text="No" />
                                     </div>
                                 </ContentTemplate>
@@ -168,16 +177,18 @@
                                         <br />
                                         <div class="clearfix"></div>
                                         <asp:Button ID="btCopiarArchivo" runat="server" OnClick="CopiarArchivos" Text="Copiar Archivo" Width="20%" Style="margin-left: 40%" />
+                                        <asp:Button ID="btCopiarArchivotodos" runat="server" OnClick="CopiarArchivosTodos" Text="Copiar Archivo" Width="20%" Style="margin-left: 40%" />
+                                        <asp:Button ID="btCopiarArchivosSelected" runat="server" OnClick="CopiarArchivosSelected" Text="Copiar Archivo" Width="20%" Style="margin-left: 40%" />
                                         <asp:Label ID="lbMovidos" runat="server" Text="Label"></asp:Label>
                                 </asp:View>
                                 <asp:View ID="ViewCarpetas" runat="server">
                                     <div class="row">
                                         <div class="form-group">
                                             <div class="col-md-8">
-                                                <asp:ListBox ID="ListaArchivos" runat="server" Width="100%" Height="15%" Style="display: inline"></asp:ListBox>
+                                                <asp:TextBox ID="txtRuta" runat="server" CssClass="form-control" Width="100%"></asp:TextBox>
                                             </div>
                                             <div class="col-md-4">
-                                                <asp:FileUpload ID="CargarCarpeta" runat="server" Style="display: inline" /><br />
+                                                <asp:Label ID="Label4" runat="server" Text="Label">Ingrese Ruta De La Carpeta</asp:Label>
                                             </div>
                                         </div>
 
@@ -188,15 +199,15 @@
                                             <br />
                                             <div style="display: inline">
                                                 <div class="col-md-7">
-                                                    <asp:RadioButton ID="RadioButton1" runat="server" GroupName="ruta" Checked="true" /><asp:Label ID="Label4" runat="server" Text="Label">Escritorio Publico</asp:Label>
-                                                    <asp:RadioButton ID="RadioButton2" runat="server" GroupName="ruta" /><asp:Label ID="Label5" runat="server" Text="Label">Disco Local</asp:Label>
-                                                    <asp:RadioButton ID="RadioButton3" runat="server" GroupName="ruta" /><asp:Label ID="Label6" runat="server" Text="Label">Personalizado</asp:Label>
+                                                    <asp:RadioButton ID="RbEscritorioPublico2" runat="server" GroupName="ruta" Checked="true" /><asp:Label ID="Label5" runat="server" Text="Label">Escritorio Publico</asp:Label>
+                                                    <asp:RadioButton ID="RbDiscoLocal2" runat="server" GroupName="ruta" /><asp:Label ID="Label6" runat="server" Text="Label">Disco Local</asp:Label>
+                                                    <asp:RadioButton ID="RbPersonalizado2" runat="server" GroupName="ruta" /><asp:Label ID="Label8" runat="server" Text="Label">Personalizado</asp:Label>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <asp:TextBox ID="TextBox1" runat="server" CssClass="form-control"></asp:TextBox><br />
+                                                    <asp:TextBox ID="txtPersonalizada2" runat="server" CssClass="form-control"></asp:TextBox><br />
                                                     <br />
                                                 </div>
-                                                <textarea id="txtCarga2" cols="20" rows="2" style="width: 100%"></textarea><br />
+                                                <asp:ListBox ID="ListCargaCarpetas" runat="server"></asp:ListBox>
                                                 <br />
                                             </div>
                                             <div class="progress">
@@ -206,6 +217,10 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="clearfix"></div>
+                                        <asp:Button ID="btnCOpiarCarpeta" runat="server" OnClick="CopiarCarpetas" Text="Copiar Carpeta" Width="20%" Style="margin-left: 40%" />
+                                        <asp:Button ID="BtnCopiarCArpetasTodos" runat="server" OnClick="CopiarCarpetasTodos" Text="Copiar Carpeta" Width="20%" Style="margin-left: 40%" />
+                                        <asp:Label ID="lbCarpMovidas" runat="server" Text="Label"></asp:Label>
                                 </asp:View>
                             </asp:MultiView>
                         </ContentTemplate>

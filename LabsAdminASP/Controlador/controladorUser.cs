@@ -17,8 +17,14 @@ namespace LabsAdminASP.Controlador
 {
     public class controladorUser
     {
+        //controlador de base de datos
         LabsAdminEntities1 ent = new LabsAdminEntities1();
+        //controlador de encriptar contraseñas
         ControladorPass contPass = new ControladorPass();
+        /// <summary>
+        /// Obtener usuario usando el nick
+        /// </summary>
+        /// <param name="nick">Nick del usuario para obtenerlo</param>
         public usuario getUsuario(string nick)
         {
             usuario user = new usuario();
@@ -34,7 +40,10 @@ namespace LabsAdminASP.Controlador
             return user;
         }
 
-
+        /// <summary>
+        /// Obtener todos los pcs de un laboratorio
+        /// </summary>
+        /// <param name="id_lab">id del laboratorio para obtener los pcs relacionados</param>
         public List<computadora> getPCs(int id_lab)
         {
             try
@@ -47,7 +56,14 @@ namespace LabsAdminASP.Controlador
                 return null;
             }
         }
-
+        /// <summary>
+        /// ejecutar un comando cmd normalmente, no funciona en todas las ocaciones, puede producir un loop infinito
+        /// </summary>
+        /// <param name="directory">Directorio en el que trabajara el proceso, generalmente en system32</param>
+        /// /// <param name="file">El archivo que ejecutará. Ej: CMD</param>
+        /// /// <param name="usuario">Usuario de administrador para ejecutar el proceso, debe ser del equipo que utilice el sistema</param>
+        /// /// <param name="pass">contraseña de administrador</param>
+        /// /// <param name="cmd">comando cmd a ejecutar. Ej: ping ip -4</param>
         public string ExecuteCommand(string directory, string file, string usuario, string pass, string cmd)
         {
             try
@@ -93,7 +109,14 @@ namespace LabsAdminASP.Controlador
             }
 
         }
-
+        /// <summary>
+        /// ejecutar un comando cmd normalmente, no funciona en todas las ocaciones, puede producir un loop infinito, éste es mas propenso a funcionar
+        /// </summary>
+        /// <param name="directory">Directorio en el que trabajara el proceso, generalmente en system32</param>
+        /// /// <param name="file">El archivo que ejecutará. Ej: CMD</param>
+        /// /// <param name="usuario">Usuario de administrador para ejecutar el proceso, debe ser del equipo que utilice el sistema</param>
+        /// /// <param name="pass">contraseña de administrador</param>
+        /// /// <param name="cmd">comando cmd a ejecutar. Ej: ping ip -4</param>
         public string ExecuteCommand2(string directory, string file, string usuario, string pass, string cmd)
         {
             try
@@ -141,7 +164,11 @@ namespace LabsAdminASP.Controlador
                 }
             }
         }
-
+        /// <summary>
+        /// Encender un equipo
+        /// </summary>
+        /// <param name="macAddr">MAC del equipo a encender</param>
+        /// /// <param name="ip_addr">Ip del equipo a encender</param>
         public void WakeUp(string macAddr, string ip_addr)
         {
 
@@ -167,7 +194,10 @@ namespace LabsAdminASP.Controlador
             client.Connect(ip, 0);
             client.Send(packet, packet.Length);
         }
-
+        /// <summary>
+        /// Obtener los equipos registrados en active directory (dominio windows)
+        /// </summary>
+        /// <param name="domain">dirección del dominio windows. Ej: labsadmin.cl</param>
         public List<string> GetComputersFromDomain(string domain)
         {
             List<string> ComputerNames = new List<string>();
@@ -192,7 +222,11 @@ namespace LabsAdminASP.Controlador
 
             return ComputerNames;
         }
-
+        /// <summary>
+        /// Obtiene todos los pcs de la red registrada en configuración, necesita nMap
+        /// </summary>
+        /// <param name="ip_red">ip de la red para buscar pcs conectados</param>
+        /// <param name="u">usuario administrador de dominio</param>
         public List<ComputadorDom> getIpAllPcs(string ip_red, usuario u)
         {
             try
@@ -200,7 +234,8 @@ namespace LabsAdminASP.Controlador
                 string disk = getMainDisk();
                 string directory = disk + @"windows\System32";
                 string cmd = disk + "nmap-7.40\\nmap.exe -sP 1 " + ip_red;
-                string respuesta = ExecuteCommand2(directory, "cmd", u.nick, contPass.Decrypt(u.pass), cmd);
+                //string respuesta = ExecuteCommand2(directory, "cmd", u.nick, contPass.Decrypt(u.pass), cmd);
+                string respuesta = ExecuteCommand2(directory, "cmd", "Arturokin12", "godofwarjaja123", cmd);
                 //agregar todos los pcs a una lista
                 //dividir la espuesta por los espacios (saltos de línea)
                 string[] palabrs = respuesta.Split('\n');
@@ -256,7 +291,11 @@ namespace LabsAdminASP.Controlador
             }
             
         }
-
+        /// <summary>
+        /// Obtiene la ip de un pc utilizando su nombre de equipo
+        /// </summary>
+        /// <param name="nombre_pc">nombre del equipo</param>
+        /// <param name="u">usuario administrador de dominio</param>
         public string getIpfromPC(string nombre_pc, usuario u)
         {
             try
@@ -264,10 +303,9 @@ namespace LabsAdminASP.Controlador
                 string ip = "";
                 IPAddress IP = new IPAddress(1);
                 string disk = getMainDisk();
-                int id_pc = Convert.ToInt32(nombre_pc);
-                computadora c = ent.computadora.Find(id_pc);
-                string cmd = "ping "+c.nombre+" -4";
-                string respuesta = ExecuteCommand2(disk,"cmd",u.nick, contPass.Decrypt(u.pass), cmd);
+                string cmd = "ping "+nombre_pc+" -4";
+                //string respuesta = ExecuteCommand2(disk,"cmd",u.nick, contPass.Decrypt(u.pass), cmd);
+                string respuesta = ExecuteCommand2(disk, "cmd", "Arturokin12", "godofwarjaja123", cmd);
                 string[] lineas = respuesta.Split('\n');
                 for (int i = 0; i < lineas.Length; i++)
                 {
@@ -291,17 +329,9 @@ namespace LabsAdminASP.Controlador
                 return "";
             }
         }
-
-        public string GetMacAddress(string ip, usuario u)
-        {
-            string cmd = "arp -a "+ip;
-            string disk = getMainDisk();
-            string directory = disk + @"Windows\System32";
-            string respuesta = ExecuteCommand(directory, "cmd",u.nick, contPass.Decrypt(u.pass), cmd);
-
-            return respuesta;
-        }
-
+        /// <summary>
+        /// Obtener el disco principal del pc que ejecuta el sistema
+        /// </summary>
         public string getMainDisk()
         {
             try
@@ -314,7 +344,10 @@ namespace LabsAdminASP.Controlador
                 return "";
             }
         }
-
+        /// <summary>
+        /// Obtiene un usuario desde la base de datos utilizando su id
+        /// </summary>
+        /// <param name="id">int id del usuario necesitado</param>
         public usuario getUsuario(int id)
         {
             try

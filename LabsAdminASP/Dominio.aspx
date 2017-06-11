@@ -103,7 +103,7 @@
                                     <asp:DropDownList ID="cbLaboratorio2" runat="server" AutoPostBack="true" OnSelectedIndexChanged="cbLaboratorio2_SelectedIndexChanged" CssClass="form-control"></asp:DropDownList>
                                 </div>
                                 <div>
-                                    <asp:GridView ID="tablaComputadoras" CssClass="table table-bordered" runat="server" AutoGenerateColumns="False" OnSelectedIndexChanging="tablaComputadoras_SelectedIndexChanging">
+                                    <asp:GridView ID="tablaComputadoras" CssClass="table table-bordered" runat="server" AutoGenerateColumns="False" OnSelectedIndexChanging="tablaComputadoras_SelectedIndexChanging" OnRowDeleting="tablaComputadoras_RowDeleting">
 
                                         <Columns>
                                             <asp:TemplateField HeaderText="#" SortExpression="id_computadora">
@@ -299,6 +299,36 @@
                 </div>
             </div>
             <asp:ModalPopupExtender ID="modalPupoExtenderMensaje" OkControlID="btOkMensaje" CancelControlID="btCancelMensaje" TargetControlID="btHiddenMensaje" PopupControlID="modalPupoMensaje" runat="server"></asp:ModalPopupExtender>
+
+
+            <%-- Modal Eliminar --%>
+            <asp:Button ID="Button1" CssClass="hidden" runat="server" Text="Button" />
+            <div id="modalpupoEliminar" class="modal-dialog animated slideInDown">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" style="display: inline">
+                                <asp:Label ID="Label8" Style="display: inline" runat="server" Text="Eliminar Computadora"></asp:Label></h5>
+                            <asp:LinkButton runat="server" ID="LinkButton4" OnClick="btCancelMensaje_Click" class="close" Style="display: inline" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </asp:LinkButton>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <p>
+                                    <asp:Label ID="lbidEliminar" runat="server" Text="" CssClass="hidden"></asp:Label>
+                                    <asp:Label ID="lbMensajeEliminar" runat="server" Text=""></asp:Label>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <asp:Button ID="btEliminarPc" OnClick="btEliminarPc_Click" runat="server" Text="Si" UseSubmitBehavior="false" CssClass="btn btn-info" />
+                            <asp:Button ID="Button3" runat="server" Text="No" UseSubmitBehavior="false" CssClass="btn btn-info" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <asp:ModalPopupExtender ID="modalPupoEliminarPc" OkControlID="Button3" CancelControlID="LinkButton4" TargetControlID="Button1" PopupControlID="modalpupoEliminar" runat="server"></asp:ModalPopupExtender>
 
         </ContentTemplate>
     </asp:UpdatePanel>

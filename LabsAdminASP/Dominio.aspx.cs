@@ -18,13 +18,15 @@ namespace LabsAdminASP
         {
             if (!IsPostBack)
             {
-                lbid_usuario.Text = "4";
-
-                //List<string> pcs = cont.GetComputersFromDomain("labsadmin.cl");
-                List<string> pcs = new List<string>();
-                pcs.Add("DESKTOP-IFOB8Q2");
-                pcs.Add("tal_lab0101");
-                pcs.Add("DESKTOP-SGF53VS");
+                lbid_usuario.Text = "2";
+                config config = ent.config.ToList().ElementAt(0);
+                List<string> pcs = cont.GetComputersFromDomain(config.dominio);
+                //List<string> pcs = new List<string>();
+                //pcs.Add("DESKTOP-IFOB8Q2");
+                //pcs.Add("tal_lab0101");
+                //pcs.Add("DESKTOP-SGF53VS");
+                //pcs.Add("DESKTOP-AEHRM66");
+                //pcs.Add("ADOKYNSTORE-PC");
 
                 List<ComputadorDom> listaPcs = new List<ComputadorDom>();
                 foreach (var i in pcs)
@@ -257,6 +259,50 @@ namespace LabsAdminASP
             btEditComputadora.Visible = true;
             btAddComputadora1.Visible = false;
             modalPupoAgregarDom.Show();
+        }
+
+        protected void tablaComputadoras_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            Label id_pc = (Label)tablaComputadoras.Rows[e.RowIndex].FindControl("Label1");
+            computadora pc = ent.computadora.Find(Convert.ToInt32(id_pc.Text));
+            lbidEliminar.Text = id_pc.Text;
+            lbMensajeEliminar.Text = "¿Está seguro que desea eliminar el pc '"+pc.nombre+"'?";
+            UpdatePanel1.Update();
+            UpdatePanel2.Update();
+            modalPupoEliminarPc.Show();
+        }
+
+        protected void btEliminarPc_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string id_lab = cbLaboratorio.SelectedValue.ToString();
+                int id_pc = Convert.ToInt32(lbidEliminar.Text);
+                computadora c = ent.computadora.Find(id_pc);
+                ent.computadora.Remove(c);
+                if (ent.SaveChanges()>0)
+                {
+                    lbTituloMensaje.Text = "Eliminar Computadora";
+                    lbMensaje.Text = "Computadora eliminada correctamente";
+                    modalPupoExtenderMensaje.Show();
+                    cbLaboratorio2.SelectedValue = id_lab;
+                    cbLaboratorio2_SelectedIndexChanged(sender, e);
+                    UpdatePanel1.Update();
+                }else
+                {
+                    lbTituloMensaje.Text = "Error al Eliminar Computadora";
+                    lbMensaje.Text = "No se ha podido eliminar la computadora";
+                    modalPupoExtenderMensaje.Show();
+                    UpdatePanel1.Update();
+                }
+            }
+            catch (Exception ex)
+            {
+                lbTituloMensaje.Text = "Error al Eliminar Computadora";
+                lbMensaje.Text = ex.ToString().Substring(0,400);
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
+            }
         }
     }
 }
