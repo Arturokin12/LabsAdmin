@@ -15,9 +15,17 @@ namespace LabsAdminASP
         {
             if (!IsPostBack)
             {
-                List<usuario> usuarios = ent.usuario.ToList();
-                tablaUsuarios.DataSource = usuarios;
-                tablaUsuarios.DataBind();
+                string usuario = Session["nickUser"].ToString();
+                if (usuario != "")
+                {
+                    List<usuario> usuarios = ent.usuario.ToList();
+                    tablaUsuarios.DataSource = usuarios;
+                    tablaUsuarios.DataBind();
+                }
+                else
+                {
+                    Response.Redirect("login.aspx");
+                }
             }
         }
 

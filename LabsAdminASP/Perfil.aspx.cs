@@ -19,11 +19,20 @@ namespace LabsAdminASP
         {
             if (!IsPostBack)
             {
-                usuario u = ent.usuario.Find(3);
-                lbid_usuario.Text = u.id_usuario + "";
-                txtNick.Text = u.nick;
-                txtNombre.Text = u.nombre;
-                imgUsuario.ImageUrl = u.imagen;
+                string usuario = Session["nickUser"].ToString();
+                if (usuario != "")
+                {
+                    usuario u = cont.getUsuario(usuario);
+                    lbid_usuario.Text = u.id_usuario + "";
+                    txtNick.Text = u.nick;
+                    txtNombre.Text = u.nombre;
+                    imgUsuario.ImageUrl = u.imagen;
+                }
+                else
+                {
+                    Response.Redirect("login.aspx");
+                }
+
             }
         }
 

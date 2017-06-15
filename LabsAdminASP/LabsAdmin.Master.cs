@@ -6,28 +6,38 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using LabsAdminASP.Modelo;
+using LabsAdminASP.Controlador;
 
 namespace LabsAdmin_Plantilla
 {
     public partial class LabsAdmin : System.Web.UI.MasterPage
     {
         LabsAdminEntities1 ent = new LabsAdminEntities1();
+        controladorUser cont = new controladorUser();
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
-                usuario u = ent.usuario.Find(3);
-                //lbid_usuario.Text = u.id_usuario + "";
-                //.Text = u.nick;
-                if (u.nombre.Split().Length > 1)
+                string usuario = Session["nickUser"].ToString();
+                if (usuario != "")
                 {
-                    lbNombreUsuario.Text = u.nombre.Split()[0] + " " + u.nombre.Split()[1]; lbNombreUsuario2.Text = u.nombre.Split()[0] + " " + u.nombre.Split()[1];
-                }else
-                {
-                    lbNombreUsuario.Text = u.nombre; lbNombreUsuario2.Text = u.nombre.Split()[0] + " " + u.nombre.Split()[1];
+                    usuario u = cont.getUsuario(usuario);
+                    //lbid_usuario.Text = u.id_usuario + "";
+                    //.Text = u.nick;
+                    if (u.nombre.Split().Length > 1)
+                    {
+                        lbNombreUsuario.Text = u.nombre.Split()[0] + " " + u.nombre.Split()[1]; lbNombreUsuario2.Text = u.nombre.Split()[0] + " " + u.nombre.Split()[1];
+                    }
+                    else
+                    {
+                        lbNombreUsuario.Text = u.nombre; lbNombreUsuario2.Text = u.nombre.Split()[0];
+                    }
+                    imgUsuario1.ImageUrl = u.imagen; imgUsuario2.ImageUrl = u.imagen;
                 }
-                
-                imgUsuario1.ImageUrl = u.imagen; imgUsuario2.ImageUrl = u.imagen;
+                else
+                {
+                    Response.Redirect("login.aspx");
+                }
             }
         }
 

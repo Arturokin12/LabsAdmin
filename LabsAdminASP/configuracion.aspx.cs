@@ -19,41 +19,49 @@ namespace LabsAdminASP
         {
             if (!IsPostBack)
             {
-                config c = ent.config.ToList().ElementAt(0);
-                txtIPDominio.Text = c.ip_dominio;
-                txtNombreDominio.Text = c.nombre_dominio;
-                txtDominio.Text = c.dominio;
-                txtUsuario.Text = c.usuario_admin;
-                if (c.usar_dominio == 0)
+                string usuario = Session["nickUser"].ToString();
+                if (usuario != "")
                 {
-                    btNoDom.CssClass = "btn btn-danger btn-sm";
-                    btYesDom.CssClass = "btn btn-default btn-sm";
-                    btYesDom.Enabled = true;
-                    btNoDom.Enabled = false;
-                }
-                else
-                {
-                    btYesDom.CssClass = "btn btn-info btn-sm";
-                    btNoDom.CssClass = "btn btn-default btn-sm";
-                    btYesDom.Enabled = false;
-                    btNoDom.Enabled = true;
-                }
+                    config c = ent.config.ToList().ElementAt(0);
+                    txtIPDominio.Text = c.ip_dominio;
+                    txtNombreDominio.Text = c.nombre_dominio;
+                    txtDominio.Text = c.dominio;
+                    txtUsuario.Text = c.usuario_admin;
+                    if (c.usar_dominio == 0)
+                    {
+                        btNoDom.CssClass = "btn btn-danger btn-sm";
+                        btYesDom.CssClass = "btn btn-default btn-sm";
+                        btYesDom.Enabled = true;
+                        btNoDom.Enabled = false;
+                    }
+                    else
+                    {
+                        btYesDom.CssClass = "btn btn-info btn-sm";
+                        btNoDom.CssClass = "btn btn-default btn-sm";
+                        btYesDom.Enabled = false;
+                        btNoDom.Enabled = true;
+                    }
 
-                if (c.usar_usuario == 0)
-                {
-                    btNoUser.CssClass = "btn btn-danger btn-sm";
-                    btSiUser.CssClass = "btn btn-default btn-sm";
-                    panelUsuario.Enabled = false;
-                    btSiUser.Enabled = true;
-                    btNoUser.Enabled = false;
+                    if (c.usar_usuario == 0)
+                    {
+                        btNoUser.CssClass = "btn btn-danger btn-sm";
+                        btSiUser.CssClass = "btn btn-default btn-sm";
+                        panelUsuario.Enabled = false;
+                        btSiUser.Enabled = true;
+                        btNoUser.Enabled = false;
+                    }
+                    else
+                    {
+                        btSiUser.CssClass = "btn btn-info btn-sm";
+                        btNoUser.CssClass = "btn btn-default btn-sm";
+                        btSiUser.Enabled = false;
+                        btNoUser.Enabled = true;
+                        panelUsuario.Enabled = true;
+                    }
                 }
                 else
                 {
-                    btSiUser.CssClass = "btn btn-info btn-sm";
-                    btNoUser.CssClass = "btn btn-default btn-sm";
-                    btSiUser.Enabled = false;
-                    btNoUser.Enabled = true;
-                    panelUsuario.Enabled = true;
+                    Response.Redirect("login.aspx");
                 }
             }
         }

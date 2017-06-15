@@ -3,7 +3,7 @@
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
-    <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Always">
+    <asp:UpdatePanel ID="UpdatePanel1" runat="server" UpdateMode="Conditional">
         <ContentTemplate>
             <div class="row">
                 <div class="col-md-12">
@@ -21,7 +21,8 @@
                                     <ul class="dropdown-menu" role="menu">
                                         <asp:LinkButton ID="lnkEncender" OnClick="panelEncenderTodos" CssClass="fa fa-sun-o" runat="server">Encender Laboratorio</asp:LinkButton>
                                         <asp:LinkButton ID="lnkApagar" OnClick="panelApagarTodos" CssClass="fa fa-power-off" runat="server">Apagar Laboratorio</asp:LinkButton>
-                                        <asp:LinkButton ID="lnkCopiar" CssClass="fa fa-scissors" runat="server">Copiar a Laboratorio</asp:LinkButton>
+                                        <asp:LinkButton ID="lnkCopiar" OnClick="CopiarPopuTodos" CssClass="fa fa-scissors" runat="server">Copiar a Laboratorio</asp:LinkButton>
+                                        <asp:LinkButton ID="lnkLimpiarTodos" OnClick="confirmarLimpiarCuentasTodos" CssClass="fa fa-eraser" runat="server">Limpiar Cuentas Todos</asp:LinkButton>
                                     </ul>
                                 </li>
                             </ul>
@@ -36,8 +37,8 @@
                                 <div class="col-md-2">
                                     <asp:LinkButton ID="lnkEncenderSelect" OnClick="panelEncenderSelected" Width="100%" CssClass="btn btn-info btn-new disabled" Enabled="false" runat="server"><i class="fa fa-sun-o"></i> Endender Seleccionados</asp:LinkButton>
                                     <asp:LinkButton ID="lnkApagarSelect" OnClick="panelApagarSelected" Width="100%" CssClass="btn btn-info btn-new disabled" Enabled="false" runat="server"><i class="fa fa-power-off"></i> Apagar Seleccionados</asp:LinkButton>
-                                    <asp:LinkButton ID="lnkCopiarSelect" Width="100%" CssClass="btn btn-info btn-new disabled" Enabled="false" runat="server"><i class="fa fa-scissors"></i> Copiar a Seleccionados</asp:LinkButton>
-                                    <asp:LinkButton ID="lnkLimpiarCuentas" OnClick="panelLimpiarCuentasSelected" Width="100%" CssClass="btn btn-info btn-new disabled" Enabled="false" runat="server"><i class="fa fa-eraser"></i> Limpiar Cuentas</asp:LinkButton>
+                                    <asp:LinkButton ID="lnkCopiarSelect" OnClick="CopiarPopuSelected" Width="100%" CssClass="btn btn-info btn-new disabled" Enabled="false" runat="server"><i class="fa fa-scissors"></i> Copiar a Seleccionados</asp:LinkButton>
+                                    <asp:LinkButton ID="lnkLimpiarCuentas" OnClick="panelLimpiarCuentasTodos" Width="100%" CssClass="btn btn-info btn-new disabled" Enabled="false" runat="server"><i class="fa fa-eraser"></i> Limpiar Cuentas</asp:LinkButton>
                                 </div>
                             </div>
 
@@ -101,16 +102,16 @@
                                         </asp:UpdateProgress>
                                         <asp:Button ID="btConfirmarApagar" OnClick="apagar" CssClass="btn btn-default" runat="server" Text="Si" />
                                         <asp:Button ID="btConfirmarApagarTodos" OnClick="btConfirmarApagarTodos_Click" CssClass="btn btn-default" runat="server" Text="Si" />
-                                        <asp:Button ID="btConfirmarApagarSelected" OnClick="panelApagarSelected" CssClass="btn btn-default" runat="server" Text="Si" />
-                                        
-                                        <asp:Button ID="btConfirmarLimpiarCuentas" OnClick="confirmarLimpiarCuentasTodos" CssClass="btn btn-default" runat="server" Text="Si" />
+                                        <asp:Button ID="btConfirmarApagarSelected" OnClick="ConfirmarApagarSelected" CssClass="btn btn-default" runat="server" Text="Si" />
+
+                                        <asp:Button ID="btConfirmarLimpiarCuentas" OnClick="confirmarLimpiarCuentas" CssClass="btn btn-default" runat="server" Text="Si" />
                                         <asp:Button ID="btConfirmarLimpiarCuentasTodos" OnClick="confirmarLimpiarCuentasTodos" CssClass="btn btn-default" runat="server" Text="Si" />
                                         <asp:Button ID="btConfirmarLimpiarCuentasSelected" OnClick="LimpiarCuentasSelected" CssClass="btn btn-default" runat="server" Text="Si" />
-                                        
+
                                         <asp:Button ID="btConfirmarEncender" OnClick="encender" CssClass="btn btn-default" runat="server" Text="Si" />
                                         <asp:Button ID="btConfirmarEncenderTodos" OnClick="ConfirmarEncenderTodos" CssClass="btn btn-default" runat="server" Text="Si" />
                                         <asp:Button ID="btConfirmarEncenderSelected" OnClick="encenderSelected" CssClass="btn btn-default" runat="server" Text="Si" />
-                                        
+
                                         <asp:Button ID="btNoConfirmar" CssClass="btn btn-default" OnClick="hideModalConfirm" runat="server" Text="No" />
                                     </div>
                                 </ContentTemplate>
@@ -164,14 +165,6 @@
                                                     <asp:TextBox ID="txt_rutaNueva" runat="server" CssClass="form-control"></asp:TextBox><br />
                                                     <br />
                                                 </div>
-                                                <textarea id="txtcarga1" cols="20" rows="2" style="width: 100%"></textarea><br />
-                                                <br />
-                                            </div>
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="70"
-                                                    aria-valuemin="0" aria-valuemax="100" style="width: 70%">
-                                                    70%
-                                                </div>
                                             </div>
                                         </div>
                                         <br />
@@ -207,19 +200,12 @@
                                                     <asp:TextBox ID="txtPersonalizada2" runat="server" CssClass="form-control"></asp:TextBox><br />
                                                     <br />
                                                 </div>
-                                                <asp:ListBox ID="ListCargaCarpetas" runat="server"></asp:ListBox>
-                                                <br />
-                                            </div>
-                                            <div class="progress">
-                                                <div class="progress-bar" role="progressbar" aria-valuenow="70"
-                                                    aria-valuemin="0" aria-valuemax="100" style="width: 70%">
-                                                    70%
-                                                </div>
                                             </div>
                                         </div>
                                         <div class="clearfix"></div>
-                                        <asp:Button ID="btnCOpiarCarpeta" runat="server" OnClick="CopiarCarpetas" Text="Copiar Carpeta" Width="20%" Style="margin-left: 40%" />
-                                        <asp:Button ID="BtnCopiarCArpetasTodos" runat="server" OnClick="CopiarCarpetasTodos" Text="Copiar Carpeta" Width="20%" Style="margin-left: 40%" />
+                                        <asp:Button ID="btnCopiarCarpeta" runat="server" OnClick="CopiarCarpetas" Text="Copiar Carpeta" Width="20%" Style="margin-left: 40%" />
+                                        <asp:Button ID="BtnCopiarCarpetasTodos" runat="server" OnClick="CopiarCarpetasTodos" Text="Copiar Carpeta" Width="20%" Style="margin-left: 40%" />
+                                        <asp:Button ID="BtnCopiarcarpetaSelect" runat="server" OnClick="CopiarCarpetasSelect" Text="Copiar Carpeta" Width="20%" Style="margin-left: 40%" />
                                         <asp:Label ID="lbCarpMovidas" runat="server" Text="Label"></asp:Label>
                                 </asp:View>
                             </asp:MultiView>

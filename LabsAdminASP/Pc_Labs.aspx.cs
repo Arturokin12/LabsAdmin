@@ -9,6 +9,7 @@ using LabsAdminASP.Modelo;
 using LabsAdminASP.Controlador;
 using System.IO;
 using System.Threading;
+using System.Management.Automation;
 
 namespace LabsAdminASP
 {
@@ -29,13 +30,23 @@ namespace LabsAdminASP
         {
             if (!IsPostBack)
             {
-                //obtener el id del laboratorio seleccionado
-                string x = Session["id_laboratorio"].ToString();
-                string id_lab = x.Replace("btLab", "");
-                laboratorio laboratorio = ent.laboratorio.Find(Convert.ToInt32(id_lab));
-                //guardar id del usuario que tiene iniciada la sesión
-                lbid_usuario.Text = "3";
-                Num_Lab.Text = Session["id_laboratorio"].ToString();
+                string usuario = Session["nickUser"].ToString();
+                if (usuario != "")
+                {
+                    //obtener el id del laboratorio seleccionado
+                    string x = Session["id_laboratorio"].ToString();
+                    string id_lab = x.Replace("btLab", "");
+                    laboratorio laboratorio = ent.laboratorio.Find(Convert.ToInt32(id_lab));
+                    //guardar id del usuario que tiene iniciada la sesión
+                    usuario u = cont.getUsuario(usuario);
+                    lbid_usuario.Text = u.id_usuario.ToString();
+                    Num_Lab.Text = Session["id_laboratorio"].ToString();
+                }
+                else
+                {
+                    Response.Redirect("login.aspx");
+                }
+
             }
         }
 
@@ -61,7 +72,7 @@ namespace LabsAdminASP
 
                     HtmlGenericControl divFinal = new HtmlGenericControl();
                     divFinal.TagName = "div";
-                    divFinal.Attributes["class"] = "col-md-55";
+                    divFinal.Attributes["class"] = "col-md-3";
 
                     HtmlGenericControl div = new HtmlGenericControl();
                     div.TagName = "div";
@@ -130,6 +141,13 @@ namespace LabsAdminASP
                     lbt_cuentas.Text = "<i class='fa fa-eraser' aria-hidden=true'></i>";
                     div5.Controls.Add(lbt_cuentas);
 
+                    LinkButton lbt_ssh = new LinkButton();
+                    lbt_ssh.ID = "bt_ssh" + i.id_computadora;
+                    lbt_ssh.Click += new EventHandler(newSSH);
+                    lbt_ssh.ToolTip = "Levantar conexión SSH";
+                    lbt_ssh.Text = "<i class='fa fa-terminal' aria-hidden=true'></i>";
+                    div5.Controls.Add(lbt_ssh);
+
                     HtmlGenericControl div4 = new HtmlGenericControl();
                     div4.TagName = "div";
                     div4.Attributes["class"] = "caption";
@@ -146,9 +164,12 @@ namespace LabsAdminASP
                     PCs.Controls.Add(divFinal);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                lbTituloMensaje.Text = "Error al cargar pc's equipo";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
             }
         }
         /// <summary>
@@ -208,7 +229,10 @@ namespace LabsAdminASP
             }
             catch (Exception ex)
             {
-
+                lbTituloMensaje.Text = "Error al seleccionar pc ";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
             }
         }
         /// <summary>
@@ -242,9 +266,12 @@ namespace LabsAdminASP
                 modalPopupConfirmar.Show();
                 UpdatePanel3.Update();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                lbTituloMensaje.Text = "Error al levantar ventana";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
             }
         }
         /// <summary>
@@ -259,9 +286,10 @@ namespace LabsAdminASP
                 computadora pc = ent.computadora.Find(id);
                 //obtener usuario que tiene iniciado sesión
                 int id_user = Convert.ToInt32(lbid_usuario.Text);
-                usuario u = cont.getUsuario(id_user);
+                usuario u = ent.usuario.Find(id_user);
                 //obtener configuración para usar ip de la red
                 config c = ent.config.ToList().ElementAt(0);
+                string usuariodom = c.dominio.Replace(".cl", "") + @"\" + u.nick;
                 string command = "";
                 //si esta seleccionada la opcion de realizar acción con la ip en vez del nombre del equipo
                 if (chkIP.Checked == true)
@@ -274,21 +302,21 @@ namespace LabsAdminASP
                         if (i.mac.Equals(pc.Mac))
                         {
                             //crear string del comando usando la ip del pc
-                            command = @"\\" + i.ip + " -u DESKTOP-IFOB8Q2\\" + u.nick + " -p " + contPass.Decrypt(u.pass) + " shutdown -p";
+                            command = @"\\" + i.ip + " shutdown -p";
                         }
                     }
                 }
                 else
                 {
                     //crear string del comando usando el nombre del pc
-                    command = @"\\" + pc.nombre + " -u DESKTOP-IFOB8Q2\\" + u.nick + " -p " + contPass.Decrypt(u.pass) + " shutdown -p";
+                    command = @"\\" + pc.nombre + " shutdown -p";
                 }
                 //obtener el disco principal del pc
                 string disk = cont.getMainDisk();
                 //establecer ruta de trabajo del comando cmd
                 string directory = disk + @"Windows\System32";
                 //ejecutar comando y obtener respuesta
-                string respuesta = cont.ExecuteCommand(directory, "psexec", "Arturokin12", "godofwarjaja123", command);
+                string respuesta = cont.ExecuteCommand(directory, "psexec", u.nick, contPass.Decrypt(u.pass), command);
                 //mostrar mensaje, edita el titulo del modal, el mesaje y luego lo levanta
                 lbTituloMensaje.Text = "Resultado de Apagar Equipo " + pc.nombre;
                 lbMensaje.Text = respuesta;
@@ -299,7 +327,10 @@ namespace LabsAdminASP
             }
             catch (Exception ex)
             {
-
+                lbTituloMensaje.Text = "Error al apagar equipo";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
             }
         }
 
@@ -308,22 +339,78 @@ namespace LabsAdminASP
         /// </summary>
         protected void btConfirmarApagarTodos_Click(object sender, EventArgs e)
         {
-            //si el label del id del laboratorio no está vacío
-            if (Num_Lab.Text != "")
+            try
             {
-                //obtener laboratorio desde la base de datos
-                int id_lab = Convert.ToInt32(Num_Lab.Text.Replace("btLab", ""));
-                laboratorio l = ent.laboratorio.Find(id_lab);
-                //obtener los pcs del laboratorio seleccionado
-                var consulta = from c in ent.computadora where c.id_laboratorio == id_lab select c;
-                List<computadora> pcs = consulta.ToList();
+                //si el label del id del laboratorio no está vacío
+                if (Num_Lab.Text != "")
+                {
+                    //obtener laboratorio desde la base de datos
+                    int id_lab = Convert.ToInt32(Num_Lab.Text.Replace("btLab", ""));
+                    laboratorio l = ent.laboratorio.Find(id_lab);
+                    //obtener los pcs del laboratorio seleccionado
+                    var consulta = from c in ent.computadora where c.id_laboratorio == id_lab select c;
+                    List<computadora> pcs = consulta.ToList();
+                    //obtener el usuario que tiene iniciada la sesion desde la base de datos
+                    int id_user = Convert.ToInt32(lbid_usuario.Text);
+                    usuario u = ent.usuario.Find(id_user);
+                    //lista para almacenar pcs de la red en caso de usar la funcion de obtener ip
+                    List<ComputadorDom> pcsRed = new List<ComputadorDom>();
+                    //obtener configuración para utilizar la ip de la red
+                    config conf = ent.config.ToList().ElementAt(0);
+
+                    string usuariodom = conf.dominio.Replace(".cl", "") + @"\" + u.nick;
+                    //si se seleccionó la opcion de utilizar la ip obtener los pcs de la red con nmap
+                    if (chkIP.Checked == true)
+                    {
+                        pcsRed = cont.getIpAllPcs(conf.ip_dominio, u);
+                    }
+                    //obtener el disco principal del pc
+                    string disk = cont.getMainDisk();
+                    string directory = disk + @"Windows\System32";
+                    //recorred los pcs del laboratorio
+                    foreach (var i in pcs)
+                    {
+                        //obtener pc de la computadora en recorrido
+                        computadora pc = ent.computadora.Find(i.id_computadora);
+                        //crear comando para apagar el equipo
+                        string command = @"\\" + pc.nombre + " shutdown -p";
+                        //crear proceso en segundo plano de ejecucion del comando
+                        ThreadStart thread = new ThreadStart(() => cont.ExecuteCommand(directory, "psexec", u.nick, contPass.Decrypt(u.pass), command));
+                        Thread child = new Thread(thread);
+                        child.Start();
+                    }
+                    //mensaje de respuesta en un modal
+                    lbTituloMensaje.Text = "Apagar Laboratorio " + l.nombre;
+                    lbMensaje.Text = "Laboratorio Apagado";
+                    //ocultar modal de confirmar acción
+                    hideModalConfirm(sender, e);
+                    //levantar modal de mensaje
+                    modalPupoExtenderMensaje.Show();
+                    UpdatePanel1.Update();
+                }
+            }
+            catch (Exception ex)
+            {
+                lbTituloMensaje.Text = "Error al apagar equipos";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
+            }
+        }
+
+        protected void ConfirmarApagarSelected(object sender, EventArgs e)
+        {
+            try
+            {
                 //obtener el usuario que tiene iniciada la sesion desde la base de datos
                 int id_user = Convert.ToInt32(lbid_usuario.Text);
-                usuario u = cont.getUsuario(id_user);
+                usuario u = ent.usuario.Find(id_user);
                 //lista para almacenar pcs de la red en caso de usar la funcion de obtener ip
                 List<ComputadorDom> pcsRed = new List<ComputadorDom>();
                 //obtener configuración para utilizar la ip de la red
                 config conf = ent.config.ToList().ElementAt(0);
+
+                string usuariodom = conf.dominio.Replace(".cl", "") + @"\" + u.nick;
                 //si se seleccionó la opcion de utilizar la ip obtener los pcs de la red con nmap
                 if (chkIP.Checked == true)
                 {
@@ -333,23 +420,31 @@ namespace LabsAdminASP
                 string disk = cont.getMainDisk();
                 string directory = disk + @"Windows\System32";
                 //recorred los pcs del laboratorio
-                foreach (var i in pcs)
+                foreach (var i in SelectedPcs)
                 {
                     //obtener pc de la computadora en recorrido
-                    computadora pc = ent.computadora.Find(i.id_computadora);
+                    int id_pc = Convert.ToInt32(i);
+                    computadora pc = ent.computadora.Find(id_pc);
                     //crear comando para apagar el equipo
-                    string command = @"\\" + pc.nombre + " -u " + u.nick + " -p " + contPass.Decrypt(u.pass) + " shutdown -p";
+                    string command = @"\\" + pc.nombre + " shutdown -p";
                     //crear proceso en segundo plano de ejecucion del comando
-                    ThreadStart thread = new ThreadStart(() => cont.ExecuteCommand(directory, "psexec", "Arturokin12", "godofwarjaja123", command));
+                    ThreadStart thread = new ThreadStart(() => cont.ExecuteCommand(directory, "psexec", u.nick, contPass.Decrypt(u.pass), command));
                     Thread child = new Thread(thread);
                     child.Start();
                 }
                 //mensaje de respuesta en un modal
-                lbTituloMensaje.Text = "Apagar Laboratorio " + l.nombre;
-                lbMensaje.Text = "Laboratorio Apagado";
+                lbTituloMensaje.Text = "Apagar Equipos Seleccionados";
+                lbMensaje.Text = "Acción realizada";
                 //ocultar modal de confirmar acción
                 hideModalConfirm(sender, e);
                 //levantar modal de mensaje
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
+            }
+            catch (Exception ex)
+            {
+                lbTituloMensaje.Text = "Error al apagar equipos";
+                lbMensaje.Text = ex.ToString();
                 modalPupoExtenderMensaje.Show();
                 UpdatePanel1.Update();
             }
@@ -373,7 +468,7 @@ namespace LabsAdminASP
             {
                 //obtener el usuario que tiene iniciado sesión
                 int id_user = Convert.ToInt32(lbid_usuario.Text);
-                usuario u = cont.getUsuario(2);
+                usuario u = ent.usuario.Find(id_user);
                 //obtener configuracion para usar ip de la red
                 config config = ent.config.ToList().ElementAt(0);
                 //obtener boton presionado (contiene el id del pc)
@@ -443,7 +538,10 @@ namespace LabsAdminASP
             }
             catch (Exception ex)
             {
-
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
             }
 
         }
@@ -477,7 +575,10 @@ namespace LabsAdminASP
             }
             catch (Exception ex)
             {
-
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
             }
 
         }
@@ -513,9 +614,12 @@ namespace LabsAdminASP
                 modalPopupConfirmar.Show();
                 UpdatePanel3.Update();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
             }
         }
 
@@ -546,9 +650,12 @@ namespace LabsAdminASP
                 modalPopupConfirmar.Show();
                 UpdatePanel3.Update();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
             }
         }
 
@@ -579,9 +686,12 @@ namespace LabsAdminASP
                 modalPopupConfirmar.Show();
                 UpdatePanel3.Update();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
             }
         }
 
@@ -594,12 +704,15 @@ namespace LabsAdminASP
                 computadora pc = ent.computadora.Find(id);
                 //obtener usuario que tiene iniciada la sesión
                 int id_user = Convert.ToInt32(lbid_usuario.Text);
-                usuario u = cont.getUsuario(id_user);
+                usuario u = ent.usuario.Find(id_user);
                 //obtener configuración para usar ip de la red
                 config c = ent.config.ToList().ElementAt(0);
-                if (File.Exists("\\" + pc.nombre + @"\c$\windows\system32\delprof2.exe"))
+                string usuariodom = c.dominio.Replace(".cl", "") + @"\" + u.nick;
+                string ruta = "\\" + pc.nombre + @"\c$\windows\system32\delprof2.exe";
+                if (!File.Exists(ruta))
                 {
-                    string command = @"\\" + pc.nombre + " -u " + u.nick + " -p " + contPass.Decrypt(u.pass) + " delprof2 /q";
+                    //string command = @"\\" + pc.nombre + " -u " + usuariodom + " -p " + contPass.Decrypt(u.pass) + " delprof2 /q";
+                    string command = @"\\" + pc.nombre +" delprof2 /q";
                     //obtener el disco principal del pc
                     string disk = cont.getMainDisk();
                     //establecer ruta de trabajo del comando cmd
@@ -618,12 +731,12 @@ namespace LabsAdminASP
                 else
                 {
                     File.Copy(Server.MapPath("~/Thirds/Delprof2.exe"), @"\\" + pc.nombre + @"\c$\windows\system32\Delprof2.exe");
-                    string command = @"\\" + pc.nombre + " -u " + u.nick + " -p " + contPass.Decrypt(u.pass) + " delprof2 /q";
+                    string command = @"\\" + pc.nombre + " delprof2 /q";
                     //obtener el disco principal del pc
                     string disk = cont.getMainDisk();
                     //establecer ruta de trabajo del comando cmd
                     string directory = disk + @"Windows\System32";
-                    ThreadStart thread = new ThreadStart(() => cont.ExecuteCommand(directory, "psexec", "Arturokin12", "godofwarjaja123", command));
+                    ThreadStart thread = new ThreadStart(() => cont.ExecuteCommand(directory, "psexec", u.nick, contPass.Decrypt(u.pass), command));
                     Thread child = new Thread(thread);
                     child.Start();
                     //mostrar mensaje, edita el titulo del modal, el mesaje y luego lo levanta
@@ -654,18 +767,20 @@ namespace LabsAdminASP
                 int id_lab = Convert.ToInt32(Num_Lab.Text.Replace("btLab", ""));
                 laboratorio lab = ent.laboratorio.Find(id_lab);
                 //lista de pcs del laboratorio
-                var consulta = from comp in ent.computadora where comp.id_laboratorio.Equals(id_lab) select comp;
+                var consulta = from comp in ent.computadora where comp.id_laboratorio == id_lab select comp;
                 List<computadora> pcs = consulta.ToList();
                 //obtener usuario que tiene iniciada la sesión
                 int id_user = Convert.ToInt32(lbid_usuario.Text);
-                usuario u = cont.getUsuario(id_user);
+                usuario u = ent.usuario.Find(id_user);
                 //obtener configuración para usar ip de la red
                 config c = ent.config.ToList().ElementAt(0);
+                string usuariodom = c.dominio.Replace(".cl", "") + @"\" + u.nick;
                 foreach (var pc in pcs)
                 {
-                    if (File.Exists("\\" + pc.nombre + @"\c$\windows\system32\delprof2.exe"))
+                    string ruta = @"\\" + pc.nombre + @"\c$\windows\system32\delprof2.exe";
+                    if (File.Exists(ruta))
                     {
-                        string command = @"\\" + pc.nombre + " -u " + u.nick + " -p " + contPass.Decrypt(u.pass) + " delprof2 /q";
+                        string command = @"\\" + pc.nombre + " delprof2 /q";
                         //obtener el disco principal del pc
                         string disk = cont.getMainDisk();
                         //establecer ruta de trabajo del comando cmd
@@ -677,12 +792,12 @@ namespace LabsAdminASP
                     else
                     {
                         File.Copy(Server.MapPath("~/Thirds/Delprof2.exe"), @"\\" + pc.nombre + @"\c$\windows\system32\Delprof2.exe");
-                        string command = @"\\" + pc.nombre + " -u " + u.nick + " -p " + contPass.Decrypt(u.pass) + " delprof2 /q";
+                        string command = @"\\" + pc.nombre + " delprof2 /q";
                         //obtener el disco principal del pc
                         string disk = cont.getMainDisk();
                         //establecer ruta de trabajo del comando cmd
                         string directory = disk + @"Windows\System32";
-                        ThreadStart thread = new ThreadStart(() => cont.ExecuteCommand(directory, "psexec", "Arturokin12", "godofwarjaja123", command));
+                        ThreadStart thread = new ThreadStart(() => cont.ExecuteCommand(directory, "psexec", u.nick, contPass.Decrypt(u.pass), command));
                         Thread child = new Thread(thread);
                         child.Start();
                     }
@@ -712,16 +827,17 @@ namespace LabsAdminASP
             {
                 //obtener usuario que tiene iniciada la sesión
                 int id_user = Convert.ToInt32(lbid_usuario.Text);
-                usuario u = cont.getUsuario(id_user);
+                usuario u = ent.usuario.Find(id_user);
                 //obtener configuración para usar ip de la red
                 config c = ent.config.ToList().ElementAt(0);
+                string usuariodom = c.dominio.Replace(".cl", "") + @"\" + u.nick;
                 foreach (var i in SelectedPcs)
                 {
                     int id_pc = Convert.ToInt32(i);
                     computadora pc = ent.computadora.Find(id_pc);
                     if (File.Exists("\\" + pc.nombre + @"\c$\windows\system32\delprof2.exe"))
                     {
-                        string command = @"\\" + pc.nombre + " -u " + u.nick + " -p " + contPass.Decrypt(u.pass) + " delprof2 /q";
+                        string command = @"\\" + pc.nombre + " delprof2 /q";
                         //obtener el disco principal del pc
                         string disk = cont.getMainDisk();
                         //establecer ruta de trabajo del comando cmd
@@ -733,12 +849,12 @@ namespace LabsAdminASP
                     else
                     {
                         File.Copy(Server.MapPath("~/Thirds/Delprof2.exe"), @"\\" + pc.nombre + @"\c$\windows\system32\Delprof2.exe");
-                        string command = @"\\" + pc.nombre + " -u " + u.nick + " -p " + contPass.Decrypt(u.pass) + " delprof2 /q";
+                        string command = @"\\" + pc.nombre + " delprof2 /q";
                         //obtener el disco principal del pc
                         string disk = cont.getMainDisk();
                         //establecer ruta de trabajo del comando cmd
                         string directory = disk + @"Windows\System32";
-                        ThreadStart thread = new ThreadStart(() => cont.ExecuteCommand(directory, "psexec", "Arturokin12", "godofwarjaja123", command));
+                        ThreadStart thread = new ThreadStart(() => cont.ExecuteCommand(directory, "psexec", u.nick, contPass.Decrypt(u.pass), command));
                         Thread child = new Thread(thread);
                         child.Start();
                     }
@@ -769,7 +885,7 @@ namespace LabsAdminASP
             }
         }
 
-        
+
         /// <summary>
         /// Levantar panel para acción de apagar todos los pcs de un laboratorio
         /// </summary>
@@ -802,7 +918,10 @@ namespace LabsAdminASP
             }
             catch (Exception ex)
             {
-
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
             }
         }
 
@@ -835,7 +954,10 @@ namespace LabsAdminASP
             }
             catch (Exception ex)
             {
-
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
             }
         }
 
@@ -844,14 +966,25 @@ namespace LabsAdminASP
         /// </summary>
         public void encender(object sender, EventArgs e)
         {
-            //obtener pc desde la base de datos
-            int id = Convert.ToInt32(lbid_pcAccion.Text);
-            computadora pc = ent.computadora.Find(id);
-            //obtener usuario que tiene iniciada la sesión
-            int id_user = Convert.ToInt32(lbid_usuario.Text);
-            usuario u = cont.getUsuario(id_user);
-            //encender equipo, necesita MAC sin guiones y dobles puntos
-            cont.WakeUp(pc.Mac.Replace(":", ""), pc.ip);
+            try
+            {
+                //obtener pc desde la base de datos
+                int id = Convert.ToInt32(lbid_pcAccion.Text);
+                computadora pc = ent.computadora.Find(id);
+                //obtener usuario que tiene iniciada la sesión
+                int id_user = Convert.ToInt32(lbid_usuario.Text);
+                usuario u = ent.usuario.Find(id_user);
+                //encender equipo, necesita MAC sin guiones y dobles puntos
+                cont.WakeUp(pc.Mac.Replace(":", ""), pc.ip);
+            }
+            catch (Exception ex)
+            {
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
+            }
+
         }
 
         /// <summary>
@@ -869,7 +1002,7 @@ namespace LabsAdminASP
                 List<computadora> pcs = consulta.ToList();
                 //obtener usuario que tiene la sesion inicada de sde la base de datos
                 int id_user = Convert.ToInt32(lbid_usuario.Text);
-                usuario u = cont.getUsuario(id_user);
+                usuario u = ent.usuario.Find(id_user);
                 //obtener configuracion para utilizar ip de red
                 config config = ent.config.ToList().ElementAt(0);
                 //recorred pcs y encenderlos con procesos en segundo plano
@@ -908,7 +1041,7 @@ namespace LabsAdminASP
                     List<computadora> pcs = consulta.ToList();
                     //obtener usuario que tiene la sesion inicada de sde la base de datos
                     int id_user = Convert.ToInt32(lbid_usuario.Text);
-                    usuario u = cont.getUsuario(id_user);
+                    usuario u = ent.usuario.Find(id_user);
                     //obtener configuracion para utilizar ip de red
                     config config = ent.config.ToList().ElementAt(0);
                     //recorred pcs y encenderlos con procesos en segundo plano
@@ -920,13 +1053,16 @@ namespace LabsAdminASP
                         child.Start();
                     }
                     lbTituloMensaje.Text = "Encender Laboratorio";
-                    lbMensaje.Text = "Los computadore se encenderán en unos momentos...";
+                    lbMensaje.Text = "Los computadores se encenderán en unos momentos...";
                     modalPupoExtenderMensaje.Show();
                     UpdatePanel1.Update();
                 }
                 else
                 {
-
+                    lbTituloMensaje.Text = "Error al encender equipos seleccionados";
+                    lbMensaje.Text = "seleccione equipos para encender";
+                    modalPupoExtenderMensaje.Show();
+                    UpdatePanel1.Update();
                 }
             }
             catch (Exception ex)
@@ -940,56 +1076,149 @@ namespace LabsAdminASP
 
         public void Remoto(object sender, EventArgs e)
         {
+            try
+            {
+                int id_user = Convert.ToInt32(lbid_usuario.Text);
+                usuario u = ent.usuario.Find(id_user);
+                //obtener configuración para usar ip de la red
+                config c = ent.config.ToList().ElementAt(0);
+                string usuariodom = c.dominio.Replace(".cl", "") + @"\" + u.nick;
+                LinkButton btApagarPc = (LinkButton)sender;
+                int id = Convert.ToInt32(btApagarPc.ID.Replace("bt_Remoto", ""));
+                computadora pc = ent.computadora.Find(id);
+                string command = "mstsc.exe /v:" + pc.ip + " /f";
+                string disk = cont.getMainDisk();
+                //establecer ruta de trabajo del comando cmd
+                string directory = disk + @"Windows\System32";
+                //ejecutar comando y obtener respuesta
+                //string respuesta = cont.ExecuteCommand2(directory, "cmd", u.nick, contPass.Decrypt(u.pass), command);
+                cont.remoto(pc.ip);
+                //if (respuesta != "")
+                //{
+                //    lbTituloMensaje.Text = "Resultado control remoto";
+                //    lbMensaje.Text = respuesta;
+                //    modalPupoExtenderMensaje.Show();
+                //    UpdatePanel1.Update();
+                //}
+            }
+            catch (Exception ex)
+            {
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
+            }
+        }
+
+        public void newSSH(object sender, EventArgs e)
+        {
+            try
+            {
+                LinkButton bt = (LinkButton)sender;
+                string id = bt.ID.Replace("bt_ssh", "");
+                int id_pc = Convert.ToInt32(id);
+                string disk = cont.getMainDisk();
+                int id_user = Convert.ToInt32(lbid_usuario.Text);
+                usuario u = ent.usuario.Find(id_user);
+                config c = ent.config.ToList().ElementAt(0);
+                string usuariodom = c.dominio.Replace(".cl", "") + @"\" + u.nick;
+                //establecer ruta de trabajo del comando cmd
+                string directory = disk + @"Windows\System32";
+                computadora pc = ent.computadora.Find(id_pc);
+                string respuesta = cont.ExecuteCommand2(directory,"cmd",u.nick,contPass.Decrypt(u.pass), "start PowerShell.exe -noexit \"enter-pssession " + pc.nombre + "\"");
+            }
+            catch (Exception ex)
+            {
+                lbTituloMensaje.Text = "Error al conectar por SSH";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
+            }
 
         }
+
         /// <summary>
         /// Levantar modal para enviar archivos al pc
         /// </summary>
         public void CopiarPopu(object sender, EventArgs e)
         {
-            modalPopupExtenderCopiar.Show();
-            LinkButton bt = (LinkButton)sender;
-            string id = bt.ID.Replace("bt_Copiar", "");
-            btCopiarArchivo.Visible = true;
-            btCopiarArchivosSelected.Visible = false;
-            btCopiarArchivotodos.Visible = false;
-            lbSelectedPc.Text = id;
-            //establece la view 0
-            MultiView1.ActiveViewIndex = 0;
-            //eliminar archivos copiados al servidor
-            Eliminar_Archivos();
-
+            try
+            {
+                modalPopupExtenderCopiar.Show();
+                LinkButton bt = (LinkButton)sender;
+                string id = bt.ID.Replace("bt_Copiar", "");
+                btCopiarArchivo.Visible = true;
+                btCopiarArchivosSelected.Visible = false;
+                btCopiarArchivotodos.Visible = false;
+                btnCopiarCarpeta.Visible = true;
+                BtnCopiarCarpetasTodos.Visible = false;
+                BtnCopiarcarpetaSelect.Visible = false;
+            
+                lbSelectedPc.Text = id;
+                //establece la view 0
+                MultiView1.ActiveViewIndex = 0;
+                //eliminar archivos copiados al servidor
+                Eliminar_Archivos();
+            }
+            catch (Exception ex)
+            {
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
+            }
         }
 
         public void CopiarPopuTodos(object sender, EventArgs e)
         {
-            modalPopupExtenderCopiar.Show();
-            LinkButton bt = (LinkButton)sender;
-            string id = bt.ID.Replace("bt_Copiar", "");
-            btCopiarArchivo.Visible = false;
-            btCopiarArchivosSelected.Visible = false;
-            btCopiarArchivotodos.Visible = true;
-            lbSelectedPc.Text = id;
-            //establece la view 0
-            MultiView1.ActiveViewIndex = 0;
-            //eliminar archivos copiados al servidor
-            Eliminar_Archivos();
-
+            try
+            {
+                modalPopupExtenderCopiar.Show();
+                btCopiarArchivo.Visible = false;
+                btCopiarArchivosSelected.Visible = false;
+                btCopiarArchivotodos.Visible = true;
+                btnCopiarCarpeta.Visible = false;
+                BtnCopiarCarpetasTodos.Visible = true;
+                BtnCopiarcarpetaSelect.Visible = false;
+                //establece la view 0
+                MultiView1.ActiveViewIndex = 0;
+                //eliminar archivos copiados al servidor
+                Eliminar_Archivos();
+            }
+            catch (Exception ex)
+            {
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
+            }
         }
 
         public void CopiarPopuSelected(object sender, EventArgs e)
         {
-            modalPopupExtenderCopiar.Show();
-            LinkButton bt = (LinkButton)sender;
-            string id = bt.ID.Replace("bt_Copiar", "");
-            btCopiarArchivo.Visible = false;
-            btCopiarArchivosSelected.Visible = true;
-            btCopiarArchivotodos.Visible = false;
-            lbSelectedPc.Text = id;
-            //establece la view 0
-            MultiView1.ActiveViewIndex = 0;
-            //eliminar archivos copiados al servidor
-            Eliminar_Archivos();
+            try
+            {
+                modalPopupExtenderCopiar.Show();
+                btCopiarArchivo.Visible = false;
+                btCopiarArchivosSelected.Visible = true;
+                btCopiarArchivotodos.Visible = false;
+                BtnCopiarcarpetaSelect.Visible = true;
+                btnCopiarCarpeta.Visible = false;
+                BtnCopiarCarpetasTodos.Visible = false;
+                //establece la view 0
+                MultiView1.ActiveViewIndex = 0;
+                //eliminar archivos copiados al servidor
+                Eliminar_Archivos();
+                UpdatePanel1.Update();
+
+            }
+            catch (Exception ex)
+            {
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
+            }
         }
         /// <summary>
         /// Cambiar view en modal de copiar archivos
@@ -1011,9 +1240,19 @@ namespace LabsAdminASP
         /// </summary>
         protected void AjaxFileUpload1_UploadComplete(object sender, AjaxControlToolkit.AjaxFileUploadEventArgs e)
         {
-            string filePath = Server.MapPath("~/Data/") + e.FileName;
-            Archivos.Add(filePath);
-            CargarArchivos.SaveAs(filePath);
+            try
+            {
+                string filePath = Server.MapPath("~/Data/") + e.FileName;
+                Archivos.Add(filePath);
+                CargarArchivos.SaveAs(filePath);
+            }
+            catch (Exception ex)
+            {
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
+            }
         }
         /// <summary>
         /// Eliminar contenido de la carpeta DATA
@@ -1040,10 +1279,12 @@ namespace LabsAdminASP
                     Directory.Delete(sub, true);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
             }
         }
         /// <summary>
@@ -1064,7 +1305,7 @@ namespace LabsAdminASP
                 }
                 if (rbEscritorio.Checked)
                 {
-                    filePath2 = @"\\" + c.nombre + @"\C$\Users\Public";
+                    filePath2 = @"\\" + c.nombre + @"\C$\Users\Public\desktop";
                 }
                 if (rbPersonalizado.Checked)
                 {
@@ -1075,29 +1316,33 @@ namespace LabsAdminASP
                     string[] archvs = f.Split('\\');
                     if (File.Exists(f))
                     {
-                        if (File.Exists(filePath2 + archvs[archvs.Length - 1]))
+                        string ruta = filePath2 + @"\" + archvs[archvs.Length - 1];
+                        if (File.Exists(filePath2 + @"\" + archvs[archvs.Length - 1]))
                         {
-                            File.Delete(filePath2 + archvs[archvs.Length - 1]);
-                            File.Move(f, filePath2 + archvs[archvs.Length - 1]);
-                            Eliminar_Archivos();
+                            File.Delete(filePath2 + @"\" + archvs[archvs.Length - 1]);
+                            File.Copy(f, filePath2 + @"\" + archvs[archvs.Length - 1]);
                             lbMovidos.Text = "Archivos removido movidos";
                         }
                         else
                         {
-                            File.Move(f, filePath2 + archvs[archvs.Length - 1]);
+                            File.Copy(f, filePath2 + @"\" + archvs[archvs.Length - 1]);
                             lbMovidos.Text = "Archivos movidos";
-                            Eliminar_Archivos();
                         }
                     }
                     else
                     {
-                        lbMovidos.Text = "error, No hay Archivos";
+                        lbMovidos.Text = f + "error, No hay Archivos";
                     }
                 }
+                Archivos.Clear();
+                Eliminar_Archivos();
             }
             catch (Exception ex)
             {
-
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
             }
 
         }
@@ -1106,8 +1351,7 @@ namespace LabsAdminASP
         {
             try
             {
-                btCopiarArchivo.Visible = false;
-                btCopiarArchivotodos.Visible = true;
+               
                 string filePath2 = "";
                 //obtener laboratorio desde la base de datos
                 int id_lab = Convert.ToInt32(Num_Lab.Text.Replace("btLab", ""));
@@ -1124,7 +1368,7 @@ namespace LabsAdminASP
                     }
                     if (rbEscritorio.Checked)
                     {
-                        filePath2 = @"\\" + pc.nombre + @"\C$\Users\Public";
+                        filePath2 = @"\\" + pc.nombre + @"\C$\Users\Public\desktop";
                     }
                     if (rbPersonalizado.Checked)
                     {
@@ -1135,18 +1379,16 @@ namespace LabsAdminASP
                         string[] archvs = f.Split('\\');
                         if (File.Exists(f))
                         {
-                            if (File.Exists(filePath2 + archvs[archvs.Length - 1]))
+                            if (File.Exists(filePath2 + @"\" + archvs[archvs.Length - 1]))
                             {
-                                File.Delete(filePath2 + archvs[archvs.Length - 1]);
-                                File.Move(f, filePath2 + archvs[archvs.Length - 1]);
-                                Eliminar_Archivos();
+                                File.Delete(filePath2 + @"\" + archvs[archvs.Length - 1]);
+                                File.Copy(f, filePath2 + @"\" + archvs[archvs.Length - 1]);
                                 lbMovidos.Text = "Archivos removido movidos";
                             }
                             else
                             {
-                                File.Move(f, filePath2 + archvs[archvs.Length - 1]);
+                                File.Copy(f, filePath2 + @"\" + archvs[archvs.Length - 1]);
                                 lbMovidos.Text = "Archivos movidos";
-                                Eliminar_Archivos();
                             }
                         }
                         else
@@ -1155,11 +1397,15 @@ namespace LabsAdminASP
                         }
                     }
                 }
-
+                Archivos.Clear();
+                Eliminar_Archivos();
             }
             catch (Exception ex)
             {
-
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
             }
         }
 
@@ -1170,14 +1416,15 @@ namespace LabsAdminASP
                 string filePath2 = "";
                 foreach (var pc in SelectedPcs)
                 {
-                    computadora c = ent.computadora.Find(pc);
+                    int id_pc = Convert.ToInt32(pc);
+                    computadora c = ent.computadora.Find(id_pc);
                     if (rbDiscoC.Checked)
                     {
                         filePath2 = @"\\" + c.nombre + @"\C$";
                     }
                     if (rbEscritorio.Checked)
                     {
-                        filePath2 = @"\\" + c.nombre + @"\C$\Users\Public";
+                        filePath2 = @"\\" + c.nombre + @"\C$\Users\Public\desktop";
                     }
                     if (rbPersonalizado.Checked)
                     {
@@ -1188,18 +1435,14 @@ namespace LabsAdminASP
                         string[] archvs = f.Split('\\');
                         if (File.Exists(f))
                         {
-                            if (File.Exists(filePath2 + archvs[archvs.Length - 1]))
+                            if (File.Exists(filePath2 + @"\" + archvs[archvs.Length - 1]))
                             {
-                                File.Delete(filePath2 + archvs[archvs.Length - 1]);
-                                File.Move(f, filePath2 + archvs[archvs.Length - 1]);
-                                Eliminar_Archivos();
-                                lbMovidos.Text = "Archivos removido movidos";
+                                File.Delete(filePath2 + @"\" + archvs[archvs.Length - 1]);
+                                File.Copy(f, filePath2 + @"\" + archvs[archvs.Length - 1]);
                             }
                             else
                             {
-                                File.Move(f, filePath2 + archvs[archvs.Length - 1]);
-                                lbMovidos.Text = "Archivos movidos";
-                                Eliminar_Archivos();
+                                File.Copy(f, filePath2 + @"\" + archvs[archvs.Length - 1]);
                             }
                         }
                         else
@@ -1208,11 +1451,17 @@ namespace LabsAdminASP
                         }
                     }
                 }
+                lbMovidos.Text = "Archivos movidos";
+                Archivos.Clear();
+                Eliminar_Archivos();
 
             }
             catch (Exception ex)
             {
-
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
             }
         }
 
@@ -1220,8 +1469,8 @@ namespace LabsAdminASP
         {
             try
             {
-                BtnCopiarCArpetasTodos.Visible = false;
-                btnCOpiarCarpeta.Visible = true;
+                BtnCopiarCarpetasTodos.Visible = false;
+                btnCopiarCarpeta.Visible = true;
                 string filepath1 = txtRuta.Text;
                 string filePath2 = Server.MapPath("~/Data/");
                 string filePath3 = "";
@@ -1234,13 +1483,17 @@ namespace LabsAdminASP
                     filePath3 = @"\\" + c.nombre + @"\C$";
                     DirectoryCopy(filePath2 + carp[carp.Length - 1], filePath3, true);
                     Eliminar_Archivos();
+                    lbCarpMovidas.Text = "carpetas Copiada";
+
                 }
                 if (RbEscritorioPublico2.Checked)
                 {
                     string[] carp = filepath1.Split('\\');
-                    filePath3 = @"\\" + c.nombre + @"\C$\Users\Public";
+                    filePath3 = @"\\" + c.nombre + @"\C$\Users\Public\desktop";
                     DirectoryCopy(filePath2 + carp[carp.Length - 1], filePath3, true);
                     Eliminar_Archivos();
+                    lbCarpMovidas.Text = "carpetas Copiada";
+
                 }
                 if (RbPersonalizado2.Checked)
                 {
@@ -1248,50 +1501,107 @@ namespace LabsAdminASP
                     filePath3 = @"\\" + c.nombre + @"\C$\" + txtPersonalizada2.Text;
                     DirectoryCopy(filePath2 + carp[carp.Length - 1], filePath3, true);
                     Eliminar_Archivos();
+                    lbCarpMovidas.Text = "carpetas Copiada";
                 }
             }
             catch (Exception ex)
-            { }
+            {
+                
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
+            }
         }
 
-        public void CopiarCarpetasTodos(object sender, EventArgs e)
+        public void CopiarCarpetasSelect(object sender, EventArgs e)
         {
             try
             {
-                BtnCopiarCArpetasTodos.Visible = true;
-                btnCOpiarCarpeta.Visible = false;
                 foreach (var pc in SelectedPcs)
                 {
                     string filepath1 = txtRuta.Text;
                     string filePath2 = Server.MapPath("~/Data/");
                     string filePath3 = "";
-                    computadora c = ent.computadora.Find(pc);
+                    int id_pc = Convert.ToInt32(pc);
+                    computadora c = ent.computadora.Find(id_pc);
                     DirectoryCopy(filepath1, filePath2, true);
                     if (RbDiscoLocal2.Checked)
                     {
                         string[] carp = filepath1.Split('\\');
                         filePath3 = @"\\" + c.nombre + @"\C$";
                         DirectoryCopy(filePath2 + carp[carp.Length - 1], filePath3, true);
-                        Eliminar_Archivos();
                     }
                     if (RbEscritorioPublico2.Checked)
                     {
                         string[] carp = filepath1.Split('\\');
-                        filePath3 = @"\\" + c.nombre + @"\C$\Users\Public";
+                        filePath3 = @"\\" + c.nombre + @"\C$\Users\Public\desktop";
                         DirectoryCopy(filePath2 + carp[carp.Length - 1], filePath3, true);
-                        Eliminar_Archivos();
                     }
                     if (RbPersonalizado2.Checked)
                     {
                         string[] carp = filepath1.Split('\\');
                         filePath3 = @"\\" + c.nombre + @"\C$\" + txtPersonalizada2.Text;
                         DirectoryCopy(filePath2 + carp[carp.Length - 1], filePath3, true);
-                        Eliminar_Archivos();
                     }
                 }
+                Eliminar_Archivos();
             }
             catch (Exception ex)
-            { }
+            {
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
+            }
+        }
+
+        public void CopiarCarpetasTodos(object sender, EventArgs e)
+        {
+            try
+            {
+                //obtener laboratorio desde la base de datos
+                int id_lab = Convert.ToInt32(Num_Lab.Text.Replace("btLab", ""));
+                laboratorio l = ent.laboratorio.Find(id_lab);
+                //consulta para obtener los pcs de un laboratorio
+                var consulta = from c in ent.computadora where c.id_laboratorio == id_lab select c;
+                List<computadora> pcs = consulta.ToList();
+                //obtener usuario que tiene la sesion inicada de sde la base de datos
+                foreach (var pc in pcs)
+                {
+                    string filepath1 = txtRuta.Text;
+                    string filePath2 = Server.MapPath("~/Data/");
+                    string filePath3 = "";
+                    computadora c = ent.computadora.Find(pc.id_computadora);
+                    DirectoryCopy(filepath1, filePath2, true);
+                    if (RbDiscoLocal2.Checked)
+                    {
+                        string[] carp = filepath1.Split('\\');
+                        filePath3 = @"\\" + c.nombre + @"\C$";
+                        DirectoryCopy(filePath2 + carp[carp.Length - 1], filePath3, true);
+                    }
+                    if (RbEscritorioPublico2.Checked)
+                    {
+                        string[] carp = filepath1.Split('\\');
+                        filePath3 = @"\\" + c.nombre + @"\C$\Users\Public\desktop";
+                        DirectoryCopy(filePath2 + carp[carp.Length - 1], filePath3, true);
+                    }
+                    if (RbPersonalizado2.Checked)
+                    {
+                        string[] carp = filepath1.Split('\\');
+                        filePath3 = @"\\" + c.nombre + @"\C$\" + txtPersonalizada2.Text;
+                        DirectoryCopy(filePath2 + carp[carp.Length - 1], filePath3, true);
+                    }
+                }
+                Eliminar_Archivos();
+            }
+            catch (Exception ex)
+            {
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
+            }
         }
 
         private void DirectoryCopy(string RutaDirec, string DestinDirec, bool copiarSubDirs)
@@ -1314,7 +1624,7 @@ namespace LabsAdminASP
                         DirectoryInfo[] dirs = dir.GetDirectories();
 
                         string[] carp = RutaDirec.Split('\\');
-                        string nuevaRuta = DestinDirec + carp[carp.Length - 1];
+                        string nuevaRuta = DestinDirec + @"\"+ carp[carp.Length - 1];
                         if (Directory.Exists(nuevaRuta))
                         {
                             Directory.Delete(nuevaRuta, true);
@@ -1342,7 +1652,12 @@ namespace LabsAdminASP
 
             }
             catch (Exception ex)
-            { }
+            {
+                lbTituloMensaje.Text = "Error crítico";
+                lbMensaje.Text = ex.ToString();
+                modalPupoExtenderMensaje.Show();
+                UpdatePanel1.Update();
+            }
         }
     }
 }

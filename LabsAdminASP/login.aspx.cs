@@ -8,6 +8,7 @@ using System.DirectoryServices;
 using System.Text;
 using System.Web.Security;
 using LabsAdminASP.Controlador;
+using LabsAdminASP.Modelo;
 
 namespace LabsAdminASP
 {
@@ -16,10 +17,14 @@ namespace LabsAdminASP
 
         private string _path;
         controladorUser controlUser = new controladorUser();
+        LabsAdminEntities1 ent = new LabsAdminEntities1();
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (!IsPostBack)
+            {
+                
+            }
         }
 
         protected void loginButton_Click(object sender, EventArgs e)
@@ -36,6 +41,7 @@ namespace LabsAdminASP
                 {
                     if (controlUser.getUsuario(txtUser.Text) != null)
                     {
+                        Session["nickUser"] = txtUser.Text;
                         Response.Redirect("index.aspx");
                     }else
                     {
@@ -50,9 +56,10 @@ namespace LabsAdminASP
 
         public bool IsAuthenticated(string user, string pwd)
         {
-            _path = @"LDAP://labsadmin.cl";
-            string domain ="labsadmin.cl";
-            string domainAndUsername = domain + @"\" + user.ToLower();
+            config config = ent.config.ToList().ElementAt(0);
+            _path = @"LDAP://"+config.dominio;
+            
+            string domainAndUsername = config.dominio + @"\" + user.ToLower();
 
             DirectoryEntry entry = new DirectoryEntry(_path, domainAndUsername, pwd, AuthenticationTypes.Secure);
 

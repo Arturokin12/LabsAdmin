@@ -70,6 +70,7 @@ namespace LabsAdminASP.Controlador
             {
                 Process p = new Process();
                 ProcessStartInfo myProcessInfo = new ProcessStartInfo(); //Initializes a new ProcessStartInfo of name myProcessInfo
+                config c = ent.config.ToList().ElementAt(0);
                 myProcessInfo.WorkingDirectory = directory;
                 myProcessInfo.FileName = file;
                 myProcessInfo.Arguments = cmd;
@@ -80,6 +81,7 @@ namespace LabsAdminASP.Controlador
                     s.AppendChar(pass[i]);
                 }
                 myProcessInfo.Password = s;
+                myProcessInfo.Domain = c.dominio;
                 myProcessInfo.WindowStyle = ProcessWindowStyle.Maximized; //Sets the WindowStyle of myProcessInfo which indicates the window state to use when the process is started to Hidden
                 myProcessInfo.Verb = "runas";
                 myProcessInfo.UseShellExecute = false;
@@ -123,6 +125,7 @@ namespace LabsAdminASP.Controlador
             {
                 Process p = new Process();
                 ProcessStartInfo myProcessInfo = new ProcessStartInfo(); //Initializes a new ProcessStartInfo of name myProcessInfo
+                config c = ent.config.ToList().ElementAt(0);
                 myProcessInfo.WorkingDirectory = directory;
                 myProcessInfo.FileName = file;
                 myProcessInfo.Arguments = "";
@@ -133,6 +136,7 @@ namespace LabsAdminASP.Controlador
                     s.AppendChar(pass[i]);
                 }
                 myProcessInfo.Password = s;
+                myProcessInfo.Domain = c.dominio;
                 myProcessInfo.WindowStyle = ProcessWindowStyle.Maximized; //Sets the WindowStyle of myProcessInfo which indicates the window state to use when the process is started to Hidden
                 myProcessInfo.Verb = "runas";
                 myProcessInfo.UseShellExecute = false;
@@ -162,6 +166,19 @@ namespace LabsAdminASP.Controlador
                 {
                     return "Error desconocido, contacte al administrador.";
                 }
+            }
+        }
+
+        public void remoto(string computerName)
+        {
+            Process rdcProcess = new Process();
+
+            string executable = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\system32\mstsc.exe");
+            if (executable != null)
+            {
+                rdcProcess.StartInfo.FileName = executable;
+                rdcProcess.StartInfo.Arguments = "/v " + computerName;  // ip or name of computer to connect
+                rdcProcess.Start();
             }
         }
         /// <summary>
@@ -235,7 +252,7 @@ namespace LabsAdminASP.Controlador
                 string directory = disk + @"windows\System32";
                 string cmd = disk + "nmap-7.40\\nmap.exe -sP 1 " + ip_red;
                 //string respuesta = ExecuteCommand2(directory, "cmd", u.nick, contPass.Decrypt(u.pass), cmd);
-                string respuesta = ExecuteCommand2(directory, "cmd", "Arturokin12", "godofwarjaja123", cmd);
+                string respuesta = ExecuteCommand2(directory, "cmd", u.nick, contPass.Decrypt(u.pass), cmd);
                 //agregar todos los pcs a una lista
                 //dividir la espuesta por los espacios (saltos de línea)
                 string[] palabrs = respuesta.Split('\n');
@@ -303,9 +320,22 @@ namespace LabsAdminASP.Controlador
                 string ip = "";
                 IPAddress IP = new IPAddress(1);
                 string disk = getMainDisk();
-                string cmd = "ping "+nombre_pc+" -4";
                 //string respuesta = ExecuteCommand2(disk,"cmd",u.nick, contPass.Decrypt(u.pass), cmd);
-                string respuesta = ExecuteCommand2(disk, "cmd", "Arturokin12", "godofwarjaja123", cmd);
+                config c = ent.config.ToList().ElementAt(0);
+                string usuariodom = c.dominio.Replace(".cl", "") + @"\" + u.nick;
+                string ip_pc = "";
+                string cmd = "";
+                string respuesta = "";
+                if (c.usar_dominio == 1)
+                {
+                    cmd = @"\\" + c.nombre_dominio + " ping " + nombre_pc + " -4";
+                    respuesta = ExecuteCommand(disk, "psexec", u.nick, contPass.Decrypt(u.pass), cmd);
+                }
+                else if (c.usar_dominio == 0)
+                {
+                    cmd = "ping " + nombre_pc + " -4";
+                    respuesta = ExecuteCommand2(disk, "cmd", u.nick, contPass.Decrypt(u.pass), cmd);
+                }
                 string[] lineas = respuesta.Split('\n');
                 for (int i = 0; i < lineas.Length; i++)
                 {
@@ -318,6 +348,45 @@ namespace LabsAdminASP.Controlador
                             if (IPAddress.TryParse(palabras[j].Replace(":",""), out IP))
                             {
                                 ip = palabras[j].Replace(":","");
+                            }
+                        }
+                    }
+                }
+                return ip;
+            }
+            catch (Exception)
+            {
+                return "";
+            }
+        }
+
+        /// <summary>
+        /// Obtiene la ip de un pc utilizando su nombre de equipo
+        /// </summary>
+        /// <param name="nombre_pc">nombre del equipo</param>
+        /// <param name="u">usuario administrador de dominio</param>
+        public string getIpfromPCDC(string nombre_dominio, string nombre_pc, usuario u)
+        {
+            try
+            {
+                string ip = "";
+                IPAddress IP = new IPAddress(1);
+                string disk = getMainDisk();
+                string cmd = @"\\"+nombre_dominio+" ping " + nombre_pc + " -4";
+                //string respuesta = ExecuteCommand2(disk,"cmd",u.nick, contPass.Decrypt(u.pass), cmd);
+                string respuesta = ExecuteCommand2(disk, "cmd", u.nick, contPass.Decrypt(u.pass), cmd);
+                string[] lineas = respuesta.Split('\n');
+                for (int i = 0; i < lineas.Length; i++)
+                {
+                    if (lineas[i].Contains("bytes="))
+                    {
+                        string[] palabras = lineas[i].Split(' ');
+
+                        for (int j = 0; j < palabras.Length; j++)
+                        {
+                            if (IPAddress.TryParse(palabras[j].Replace(":", ""), out IP))
+                            {
+                                ip = palabras[j].Replace(":", "");
                             }
                         }
                     }

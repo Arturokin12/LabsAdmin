@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="LabsAdminModelStoreContainer" CdmEntityContainer="LabsAdminEntities1">
+    <EntitySetMapping Name="actividad">
+      <EntityTypeMapping TypeName="LabsAdminModel.actividad">
+        <MappingFragment StoreEntitySet="actividad">
+          <ScalarProperty Name="id_actividad" ColumnName="id_actividad" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+          <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="actividad_computador">
+      <EntityTypeMapping TypeName="LabsAdminModel.actividad_computador">
+        <MappingFragment StoreEntitySet="actividad_computador">
+          <ScalarProperty Name="id_actividad_computador" ColumnName="id_actividad_computador" />
+          <ScalarProperty Name="id_actividad" ColumnName="id_actividad" />
+          <ScalarProperty Name="id_computador" ColumnName="id_computador" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="computadora">
+      <EntityTypeMapping TypeName="LabsAdminModel.computadora">
+        <MappingFragment StoreEntitySet="computadora">
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+          <ScalarProperty Name="ip" ColumnName="ip" />
+          <ScalarProperty Name="Mac" ColumnName="Mac" />
+          <ScalarProperty Name="id_computadora" ColumnName="id_computadora" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="Marca" ColumnName="Marca" />
+          <ScalarProperty Name="Modelo" ColumnName="Modelo" />
+          <ScalarProperty Name="SO" ColumnName="SO" />
+          <ScalarProperty Name="id_laboratorio" ColumnName="id_laboratorio" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="laboratorio">
+      <EntityTypeMapping TypeName="LabsAdminModel.laboratorio">
+        <MappingFragment StoreEntitySet="laboratorio">
+          <ScalarProperty Name="id_laboratorio" ColumnName="id_laboratorio" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="usuario">
+      <EntityTypeMapping TypeName="LabsAdminModel.usuario">
+        <MappingFragment StoreEntitySet="usuario">
+          <ScalarProperty Name="imagen" ColumnName="imagen" />
+          <ScalarProperty Name="pass" ColumnName="pass" />
+          <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="nick" ColumnName="nick" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="config">
+      <EntityTypeMapping TypeName="LabsAdminModel.config">
+        <MappingFragment StoreEntitySet="config">
+          <ScalarProperty Name="ip_red" ColumnName="ip_red" />
+          <ScalarProperty Name="dominio" ColumnName="dominio" />
+          <ScalarProperty Name="usar_usuario" ColumnName="usar_usuario" />
+          <ScalarProperty Name="pass_admin" ColumnName="pass_admin" />
+          <ScalarProperty Name="usuario_admin" ColumnName="usuario_admin" />
+          <ScalarProperty Name="usar_dominio" ColumnName="usar_dominio" />
+          <ScalarProperty Name="ip_dominio" ColumnName="ip_dominio" />
+          <ScalarProperty Name="nombre_dominio" ColumnName="nombre_dominio" />
+          <ScalarProperty Name="id_conf" ColumnName="id_conf" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

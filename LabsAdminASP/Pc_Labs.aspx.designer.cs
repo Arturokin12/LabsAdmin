@@ -76,6 +76,15 @@ namespace LabsAdminASP {
         protected global::System.Web.UI.WebControls.LinkButton lnkCopiar;
         
         /// <summary>
+        /// Control lnkLimpiarTodos.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton lnkLimpiarTodos;
+        
+        /// <summary>
         /// Control PCs.
         /// </summary>
         /// <remarks>
@@ -634,31 +643,31 @@ namespace LabsAdminASP {
         protected global::System.Web.UI.WebControls.TextBox txtPersonalizada2;
         
         /// <summary>
-        /// Control ListCargaCarpetas.
+        /// Control btnCopiarCarpeta.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ListBox ListCargaCarpetas;
+        protected global::System.Web.UI.WebControls.Button btnCopiarCarpeta;
         
         /// <summary>
-        /// Control btnCOpiarCarpeta.
+        /// Control BtnCopiarCarpetasTodos.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnCOpiarCarpeta;
+        protected global::System.Web.UI.WebControls.Button BtnCopiarCarpetasTodos;
         
         /// <summary>
-        /// Control BtnCopiarCArpetasTodos.
+        /// Control BtnCopiarcarpetaSelect.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button BtnCopiarCArpetasTodos;
+        protected global::System.Web.UI.WebControls.Button BtnCopiarcarpetaSelect;
         
         /// <summary>
         /// Control lbCarpMovidas.

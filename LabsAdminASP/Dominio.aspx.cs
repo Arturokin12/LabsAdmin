@@ -18,39 +18,48 @@ namespace LabsAdminASP
         {
             if (!IsPostBack)
             {
-                lbid_usuario.Text = "2";
-                config config = ent.config.ToList().ElementAt(0);
-                List<string> pcs = cont.GetComputersFromDomain(config.dominio);
-                //List<string> pcs = new List<string>();
-                //pcs.Add("DESKTOP-IFOB8Q2");
-                //pcs.Add("tal_lab0101");
-                //pcs.Add("DESKTOP-SGF53VS");
-                //pcs.Add("DESKTOP-AEHRM66");
-                //pcs.Add("ADOKYNSTORE-PC");
-
-                List<ComputadorDom> listaPcs = new List<ComputadorDom>();
-                foreach (var i in pcs)
+                string usuario = Session["nickUser"].ToString();
+                if (usuario != "")
                 {
-                    listaPcs.Add(new ComputadorDom(i, "", ""));
+                    usuario u = cont.getUsuario(usuario);
+                    lbid_usuario.Text = u.id_usuario.ToString();
+                    config config = ent.config.ToList().ElementAt(0);
+                    List<string> pcs = cont.GetComputersFromDomain(config.dominio);
+                    //List<string> pcs = new List<string>();
+                    //pcs.Add("DESKTOP-IFOB8Q2");
+                    //pcs.Add("tal_lab0101");
+                    //pcs.Add("DESKTOP-SGF53VS");
+                    //pcs.Add("DESKTOP-AEHRM66");
+                    //pcs.Add("ADOKYNSTORE-PC");
+
+                    List<ComputadorDom> listaPcs = new List<ComputadorDom>();
+                    foreach (var i in pcs)
+                    {
+                        listaPcs.Add(new ComputadorDom(i, "", ""));
+                    }
+                    tablaPcsDominio.DataSource = listaPcs;
+                    tablaPcsDominio.DataBind();
+
+                    //obtener laboratorios para DropDownList
+                    List<laboratorio> labs = ent.laboratorio.ToList();
+                    cbLaboratorio.DataSource = labs;
+                    cbLaboratorio.DataTextField = "nombre";
+                    cbLaboratorio.DataValueField = "id_laboratorio";
+                    cbLaboratorio.DataBind();
+
+                    //obtener laboratorios para DropDownList de lista de pcs
+                    cbLaboratorio2.DataSource = labs;
+                    cbLaboratorio2.DataTextField = "nombre";
+                    cbLaboratorio2.DataValueField = "id_laboratorio";
+                    cbLaboratorio2.DataBind();
+
+                    cbLaboratorio2_SelectedIndexChanged(sender, e);
+                    //modalPopupExtenderAgregarDesdeDom.Hide();
                 }
-                tablaPcsDominio.DataSource = listaPcs;
-                tablaPcsDominio.DataBind();
-
-                //obtener laboratorios para DropDownList
-                List<laboratorio> labs = ent.laboratorio.ToList();
-                cbLaboratorio.DataSource = labs;
-                cbLaboratorio.DataTextField = "nombre";
-                cbLaboratorio.DataValueField = "id_laboratorio";
-                cbLaboratorio.DataBind();
-
-                //obtener laboratorios para DropDownList de lista de pcs
-                cbLaboratorio2.DataSource = labs;
-                cbLaboratorio2.DataTextField = "nombre";
-                cbLaboratorio2.DataValueField = "id_laboratorio";
-                cbLaboratorio2.DataBind();
-
-                cbLaboratorio2_SelectedIndexChanged(sender, e);
-                //modalPopupExtenderAgregarDesdeDom.Hide();
+                else
+                {
+                    Response.Redirect("login.aspx");
+                }
             }
         }
 
@@ -71,8 +80,8 @@ namespace LabsAdminASP
         {
             UpdatePanel2.Update();
             int id_user = Convert.ToInt32(lbid_usuario.Text);
-            usuario u = cont.getUsuario(2);
-            string ip_pc = cont.getIpfromPC(lbNombreComputadora.Text, u);   
+            usuario u = ent.usuario.Find(id_user);
+            string ip_pc = cont.getIpfromPC(lbNombreComputadora.Text, u);
             if (ip_pc != "" && ip_pc != null)
             {
                 List<ComputadorDom> pcs = cont.getIpAllPcs("192.168.0.*", u);
@@ -97,8 +106,8 @@ namespace LabsAdminASP
         {
             UpdatePanel2.Update();
             int id_user = Convert.ToInt32(lbid_usuario.Text);
-            usuario u = cont.getUsuario(id_user);
-            string ip_pc = cont.getIpfromPC(lbNombreComputadora.Text,u);
+            usuario u = ent.usuario.Find(id_user);
+            string ip_pc = cont.getIpfromPC(lbNombreComputadora.Text, u);
             if (ip_pc != null && ip_pc != "")
             {
                 txtIP.Text = ip_pc;
@@ -224,7 +233,7 @@ namespace LabsAdminASP
                         lbTituloMensaje.Text = "Computadora " + nombre + " editada";
                         lbMensaje.Text = "Computadora editada satisfactoriamente";
                         cbLaboratorio2.SelectedValue = id_lab;
-                        cbLaboratorio2_SelectedIndexChanged(sender,e);
+                        cbLaboratorio2_SelectedIndexChanged(sender, e);
                         modalPupoExtenderMensaje.Show();
                         UpdatePanel1.Update();
                     }
@@ -266,7 +275,7 @@ namespace LabsAdminASP
             Label id_pc = (Label)tablaComputadoras.Rows[e.RowIndex].FindControl("Label1");
             computadora pc = ent.computadora.Find(Convert.ToInt32(id_pc.Text));
             lbidEliminar.Text = id_pc.Text;
-            lbMensajeEliminar.Text = "¿Está seguro que desea eliminar el pc '"+pc.nombre+"'?";
+            lbMensajeEliminar.Text = "¿Está seguro que desea eliminar el pc '" + pc.nombre + "'?";
             UpdatePanel1.Update();
             UpdatePanel2.Update();
             modalPupoEliminarPc.Show();
@@ -280,7 +289,7 @@ namespace LabsAdminASP
                 int id_pc = Convert.ToInt32(lbidEliminar.Text);
                 computadora c = ent.computadora.Find(id_pc);
                 ent.computadora.Remove(c);
-                if (ent.SaveChanges()>0)
+                if (ent.SaveChanges() > 0)
                 {
                     lbTituloMensaje.Text = "Eliminar Computadora";
                     lbMensaje.Text = "Computadora eliminada correctamente";
@@ -288,7 +297,8 @@ namespace LabsAdminASP
                     cbLaboratorio2.SelectedValue = id_lab;
                     cbLaboratorio2_SelectedIndexChanged(sender, e);
                     UpdatePanel1.Update();
-                }else
+                }
+                else
                 {
                     lbTituloMensaje.Text = "Error al Eliminar Computadora";
                     lbMensaje.Text = "No se ha podido eliminar la computadora";
@@ -299,7 +309,7 @@ namespace LabsAdminASP
             catch (Exception ex)
             {
                 lbTituloMensaje.Text = "Error al Eliminar Computadora";
-                lbMensaje.Text = ex.ToString().Substring(0,400);
+                lbMensaje.Text = ex.ToString().Substring(0, 400);
                 modalPupoExtenderMensaje.Show();
                 UpdatePanel1.Update();
             }
